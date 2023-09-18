@@ -3,7 +3,7 @@ import logo from '@/assets/logo.svg'
 </script>
 
 <template>
-  <div class="flex justify-between items-center py-4 px-16">
+  <div class="static flex justify-between items-center py-4 px-16">
     <div class="cursor-pointer">
       <img :src="logo" alt="logo">
     </div>
