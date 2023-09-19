@@ -7,6 +7,7 @@ import Knowledge from "@/components/home/knowledge.vue";
 import Education from "@/components/home/education.vue";
 import CustomersReview from "@/components/home/review/customersReview.vue";
 import NewsLetter from "@/components/home/newsLetter.vue";
+import ContactUs from "@/components/home/contact/contactUs.vue";
 </script>
 
 <template>
@@ -17,6 +18,7 @@ import NewsLetter from "@/components/home/newsLetter.vue";
   <education></education>
   <customers-review></customers-review>
   <news-letter></news-letter>
+  <contact-us></contact-us>
 </template>
 
 <style scoped>
