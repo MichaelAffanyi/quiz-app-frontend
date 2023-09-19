@@ -5,6 +5,10 @@ const router = createRouter({
         {
             path: '/',
             component: () =>  import("@/views/Home.vue")
+        },
+        {
+            path: '/auth',
+            component: () => import("@/views/auth.vue")
         }
     ],
     history: createWebHistory()
