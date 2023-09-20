@@ -6,6 +6,7 @@ import googleIcon from "@/assets/auth/google.svg";
 import {ref, watch} from "vue";
 import {authApi} from '@/utils'
 import {useRouter} from "vue-router";
+import {validateOnInput, validateInput} from "@/utils/validateInput";
 
 const router = useRouter()
 const name = ref('')
@@ -35,39 +36,22 @@ const isSuccess = ref({
   message: ''
 })
 
-const isValid = () => {
-  if(!name.value || !email.value || !password.value) {
-    if(!name.value) {
-      error.value.name.isError = true
-      error.value.name.message = 'Please enter name'
-    }
-    if(!email.value) {
-      error.value.email.isError = true
-      error.value.email.message = 'Please enter email'
-    }
-    if(!password.value) {
-      error.value.password.isError = true
-      error.value.password.message = 'Please enter password'
-    }
-    return false
-  }
-  return true
-}
-
 const validateOnBlur = (event) => {
   isError.value.value = false
   isError.value.message = ''
-  if(!event.target.value) {
-    error.value[event.target.name].isError = true
-    error.value[event.target.name].message = `Please enter ${event.target.name}`
-    return
-  }
-  error.value[event.target.name].isError = false
-  error.value[event.target.name].message = ''
+  const value = event.target.value
+  const name = event.target.name
+  validateOnInput({value, name, error})
 }
 
 const handleSubmit = async () => {
-  if(!isValid()) {
+  const isValid = validateInput([
+      {name: "name", value: name},
+      {name: "email", value: email},
+      {name: "password", value: password},
+    ],
+    error)
+  if(!isValid) {
     return
   }
   try {
@@ -75,7 +59,7 @@ const handleSubmit = async () => {
     const newUser = {
       name: name.value,
       email: email.value,
-      password: email.value
+      password: password.value
     }
     const res = await authApi.post('/register', newUser)
     console.log(res)
@@ -105,8 +89,6 @@ const handleSubmit = async () => {
       <signup-header></signup-header>
       <form class="form" @submit.prevent="handleSubmit">
         <h1 class="header1">Create Account</h1>
-        <span class="error" v-if="isError.value">{{isError.message}}</span>
-        <span class="success" v-if="isSuccess.value">{{isSuccess.message}}, please wait</span>
         <div class="auth-form-control">
           <label for="name">Name</label>
           <input
@@ -146,6 +128,8 @@ const handleSubmit = async () => {
           >
           <p class="error" v-if="error.password.isError">{{error.password.message}}</p>
         </div>
+        <span class="error max-w-[285px]" v-if="isError.value">{{isError.message}}</span>
+        <span class="success max-w-[285px]" v-if="isSuccess.value">{{isSuccess.message}}, please wait</span>
         <base-button class="mt-4">
           {{isLoading ? 'Loading...' : 'Create Account'}}
         </base-button>
