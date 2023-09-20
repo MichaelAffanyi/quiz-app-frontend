@@ -3,22 +3,96 @@ import '@/views/authStyles.css'
 import signupHeader from "@/components/auth/signupHeader.vue";
 import registerImage from "@/assets/auth/register.png";
 import googleIcon from "@/assets/auth/google.svg";
-import {useStore} from "vuex";
-import {ref} from "vue";
+import {ref, watch} from "vue";
+import {authApi} from '@/utils'
+import {useRouter} from "vue-router";
 
-const store = useStore()
+const router = useRouter()
 const name = ref('')
 const email = ref('')
 const password = ref('')
-const handleSubmit = () => {
-  const newUser = {
-    name: name.value,
-    email: email.value,
-    password: email.value
+const error = ref({
+  name: {
+    isError: false,
+    message: ''
+  },
+  email: {
+    isError: false,
+    message: ''
+  },
+  password: {
+    isError: false,
+    message: ''
   }
-  console.log(newUser)
+})
+const isLoading = ref(false)
+const isError = ref({
+  value: false,
+  message: ''
+})
+const isSuccess = ref({
+  value: false,
+  message: ''
+})
+
+const isValid = () => {
+  if(!name.value || !email.value || !password.value) {
+    if(!name.value) {
+      error.value.name.isError = true
+      error.value.name.message = 'Please enter name'
+    }
+    if(!email.value) {
+      error.value.email.isError = true
+      error.value.email.message = 'Please enter email'
+    }
+    if(!password.value) {
+      error.value.password.isError = true
+      error.value.password.message = 'Please enter password'
+    }
+    return false
+  }
+  return true
 }
 
+const validateOnBlur = (event) => {
+  isError.value.value = false
+  isError.value.message = ''
+  if(!event.target.value) {
+    error.value[event.target.name].isError = true
+    error.value[event.target.name].message = `Please enter ${event.target.name}`
+    return
+  }
+  error.value[event.target.name].isError = false
+  error.value[event.target.name].message = ''
+}
+
+const handleSubmit = async () => {
+  if(!isValid()) {
+    return
+  }
+  try {
+    isLoading.value = true
+    const newUser = {
+      name: name.value,
+      email: email.value,
+      password: email.value
+    }
+    const res = await authApi.post('/register', newUser)
+    console.log(res)
+    if(res?.status === 200) {
+      isSuccess.value.value = true
+      isSuccess.value.message = res?.data?.msg
+      setTimeout(() => {
+        router.replace('/login')
+      }, 1000)
+    }
+  } catch (error) {
+    isError.value.value = true
+    isError.value.message = error.response.data.error
+    console.log(error)
+  }
+  isLoading.value = false
+}
 
 </script>
 
@@ -31,19 +105,50 @@ const handleSubmit = () => {
       <signup-header></signup-header>
       <form class="form" @submit.prevent="handleSubmit">
         <h1 class="header1">Create Account</h1>
+        <span class="error" v-if="isError.value">{{isError.message}}</span>
+        <span class="success" v-if="isSuccess.value">{{isSuccess.message}}, please wait</span>
         <div class="auth-form-control">
           <label for="name">Name</label>
-          <input type="text" name="name" id="name" placeholder="Enter your name" v-model="name">
+          <input
+              type="text"
+              name="name"
+              id="name"
+              placeholder="Enter your name"
+              v-model.trim="name"
+              @input="validateOnBlur"
+              :class="{errorInput: error.name.isError}"
+          >
+          <p class="error" v-if="error.name.isError">{{error.name.message}}</p>
         </div>
         <div class="auth-form-control">
           <label for="email">Email</label>
-          <input type="text" name="email" id="email" placeholder="Enter your email" v-model="email">
+          <input
+              type="text"
+              name="email"
+              id="email"
+              placeholder="Enter your email"
+              v-model.trim="email"
+              @input="validateOnBlur"
+              :class="{errorInput: error.email.isError}"
+          >
+          <p class="error" v-if="error.email.isError">{{error.email.message}}</p>
         </div>
         <div class="auth-form-control">
           <label for="password">Password</label>
-          <input type="password" name="password" id="password" placeholder="********" v-model="password">
+          <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="********"
+              v-model.trim="password"
+              @input="validateOnBlur"
+              :class="{errorInput: error.password.isError}"
+          >
+          <p class="error" v-if="error.password.isError">{{error.password.message}}</p>
         </div>
-        <base-button class="mt-4" type="submit">Create Account</base-button>
+        <base-button class="mt-4">
+          {{isLoading ? 'Loading...' : 'Create Account'}}
+        </base-button>
         <span class="w-full border rounded-md flex items-center gap-8 pl-16 py-2 cursor-pointer">
           <img :src="googleIcon" alt="">
           Sign up with Google
@@ -58,5 +163,17 @@ const handleSubmit = () => {
 </template>
 
 <style scoped>
+.error {
+  color: #FF4D4D;
+  font-size: 14px;
+}
 
+.errorInput {
+  border: 1px solid #FF4D4D;
+}
+
+.success {
+  color: #33FF33;
+  font-size: 14px;
+}
 </style>
