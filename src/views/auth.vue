@@ -1,18 +1,33 @@
-<script setup>
-  import {shallowRef} from "vue";
-  import loginComponent from "@/components/auth/loginComponent.vue"
-  import registerComponent from "@/components/auth/registerComponent.vue"
+<script>
+import {mapGetters} from "vuex";
+  import login from "@/components/auth/loginComponent.vue"
+  import register from "@/components/auth/registerComponent.vue"
+import {getActiveComponent} from "@/store/getters";
 
-  const comp = shallowRef(loginComponent)
-
-  const handleClick = () => {
-    comp.value = registerComponent
+export default {
+    components: {login, register},
+  data() {
+      return {
+        comp: ''
+      }
+  },
+  computed: {
+      ...mapGetters(['getActiveComponent'])
+  },
+  watch: {
+     getActiveComponent(newValue) {
+       console.log(newValue)
+       this.comp = newValue
+     }
+  },
+  mounted() {
+      this.comp = this.getActiveComponent || 'login'
   }
+}
 </script>
 
 <template>
-  <component :is="comp" />
-  <button @click="handleClick">Click me</button>
+  <component :is="comp" ></component>
 </template>
 
 <style scoped>
@@ -23,7 +38,7 @@
   letter-spacing: 0.166px;
 }
 
-:deep(.form) {
+:deep(.form-control) {
   width: 100%;
   height: 100%;
   display: flex;
@@ -33,21 +48,21 @@
   padding: 56px 58px 0;
 }
 
-:deep(form) {
+:deep(.form) {
   min-width: 350px;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-:deep(form) input {
+:deep(.form) input {
   width: 100%;
   border: 1px solid #999999;
   border-radius: 4px;
   padding: 8px 16px;
 }
 
-:deep(form) input:focus {
+:deep(.form) input:focus {
   outline: none;
 }
 
@@ -63,7 +78,7 @@
   bottom: 0;
 }
 
-:deep(.form-control) {
+:deep(.auth-form-control) {
   color: #808080;
   display: flex;
   flex-direction: column;

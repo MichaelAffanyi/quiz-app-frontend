@@ -1,7 +1,15 @@
 <script setup>
+import '@/views/authStyles.css'
   import loginImage from "@/assets/auth/login.png"
-  import SignupHeader from "@/components/auth/signupHeader.vue";
-  import googleIcon from "@/assets/auth/google.svg"
+  import {useStore} from "vuex";
+  import {inject} from "vue";
+
+  const store = useStore()
+  let comp = inject('comp')
+  const handleClick = () => {
+    store.commit('setActiveComponent', 'register')
+  }
+
 </script>
 
 <template>
@@ -9,18 +17,18 @@
     <div class="image">
       <img :src="loginImage" alt="">
     </div>
-    <div class="form justify-center">
-      <form>
-        <h1>Log in</h1>
+    <div class="form-container justify-center">
+      <form class="form">
+        <h1 class="header1">Log in</h1>
         <h2 class="text-[#A6A6A6]">
           New member?
-          <span class="font-semibold text-[#0267FF] cursor-pointer">Sign up</span>
+          <router-link to="/register" class="font-semibold text-[#0267FF] cursor-pointer" @click="handleClick">Sign up</router-link>
         </h2>
-        <div class="form-control">
+        <div class="auth-form-control">
           <label for="email">Email</label>
           <input type="text" name="email" id="email" placeholder="Enter your email">
         </div>
-        <div class="form-control">
+        <div class="auth-form-control">
           <label for="password">Password</label>
           <input type="password" name="password" id="password" placeholder="********">
         </div>
@@ -32,10 +40,6 @@
           <span class="ml-auto text-[#0267FF] cursor-pointer">Forgot password?</span>
         </div>
         <base-button class="mt-4">Create Account</base-button>
-<!--        <span class="w-full border rounded-md flex items-center gap-8 pl-16 py-2 cursor-pointer">-->
-<!--          <img :src="googleIcon" alt="">-->
-<!--          Sign up with Google-->
-<!--        </span>-->
       </form>
     </div>
   </div>
