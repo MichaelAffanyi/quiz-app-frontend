@@ -25,6 +25,16 @@ const router = createRouter({
         {
             path: '/reset-password/:token',
             component: () => import("@/views/resetPassword.vue")
+        },
+        {
+            path: '/dashboard',
+            component: () => import('@/views/dashboard.vue'),
+            children: [
+                {
+                    path: 'profile',
+                    component: () => import("@/views/profile.vue")
+                }
+            ]
         }
     ],
     history: createWebHistory()

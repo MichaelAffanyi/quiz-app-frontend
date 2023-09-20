@@ -8,10 +8,11 @@ const handleClick = () => {
   store.dispatch('setActive', 'login')
   router.push('/auth')
 }
+// const accessToken = cookies.get('accessToken')
 </script>
 
 <template>
-  <div class="flex justify-between items-center py-4 px-16">
+  <div class="h-[72px] flex justify-between items-center px-16">
     <div class="cursor-pointer">
       <img :src="logo" alt="logo">
     </div>
