@@ -6,10 +6,15 @@ import baseButton from '@/components/baseButton.vue'
 import baseBanner from '@/components/baseBanner.vue'
 import TheHeader from "@/components/ui/theHeader.vue";
 import store from "@/store";
+import VueApexCharts from "vue3-apexcharts";
+import VCalendar from 'v-calendar';
+import 'v-calendar/style.css';
 
 const app = createApp(App)
 app.use(router)
 app.use(store)
+app.use(VueApexCharts)
+app.use(VCalendar, {})
 
 app.component('base-button', baseButton)
 app.component('the-header', TheHeader)
