@@ -13,9 +13,9 @@ const handleClick = () => {
 
 <template>
   <div class="h-[72px] flex justify-between items-center px-16">
-    <div class="cursor-pointer">
+    <router-link to="/" class="cursor-pointer">
       <img :src="logo" alt="logo">
-    </div>
+    </router-link>
     <nav class="text-[#0267FF] flex gap-14 items-center">
       <span class="cursor-pointer hover:font-bold">Home</span>
       <span class="cursor-pointer hover:font-bold">Services</span>

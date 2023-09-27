@@ -7,7 +7,6 @@ import Education from "@/components/home/education.vue";
 import CustomersReview from "@/components/home/review/customersReview.vue";
 import NewsLetter from "@/components/home/newsLetter.vue";
 import ContactUs from "@/components/home/contact/contactUs.vue";
-import TheFooter from "@/components/theFooter.vue";
 </script>
 
 <template>

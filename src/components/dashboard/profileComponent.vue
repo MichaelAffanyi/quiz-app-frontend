@@ -5,6 +5,7 @@ import subject from "@/assets/dashboard/subject.svg"
 import DashboardCard from "@/components/dashboard/dashboardCard.vue";
 import Chart from "@/components/dashboard/chart.vue";
 import {ref} from "vue";
+import RecentQuizzes from "@/components/dashboard/recentQuizzes.vue";
 
 const cards = [
   {
@@ -45,9 +46,7 @@ const date = ref({
         {{ date.toLocaleString('en-US', { weekday: 'short' }) }}
       </template>
     </v-date-picker>
-    <div class="w-2/4 bg-blue-500">
-      Hello
-    </div>
+    <recent-quizzes></recent-quizzes>
   </div>
 </template>
 
@@ -62,5 +61,6 @@ const date = ref({
 }
 :deep(.vc-container) {
   width: 100%;
+  height: 100%;
 }
 </style>
