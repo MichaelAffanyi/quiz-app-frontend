@@ -33,6 +33,10 @@ const router = createRouter({
                 {
                     path: 'profile',
                     component: () => import("@/views/profile.vue")
+                },
+                {
+                    path: 'profile/quizzes',
+                    component: () => import("@/views/quizzes.vue")
                 }
             ]
         }

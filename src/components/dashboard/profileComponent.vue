@@ -40,12 +40,11 @@ const date = ref({
     <dashboard-card v-for="card in cards" :key="card.name" :card="card"></dashboard-card>
   </div>
   <Chart />
-  <div class="w-full flex gap-8 bg-green-200 mb-10">
-    <v-date-picker v-model="date" is-range >
-      <template #day-header="{ date }">
-        {{ date.toLocaleString('en-US', { weekday: 'short' }) }}
-      </template>
-    </v-date-picker>
+  <div class="w-full flex gap-8 mb-10">
+    <div class="w-full rounded-lg shadow-lg">
+      <v-date-picker v-model="date" expanded is-range :masks="{weekdays: 'WWW'}" borderless>
+      </v-date-picker>
+    </div>
     <recent-quizzes></recent-quizzes>
   </div>
 </template>

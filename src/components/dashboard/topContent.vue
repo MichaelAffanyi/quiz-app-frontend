@@ -4,21 +4,21 @@
   import {computed, ref} from "vue";
   const route = useRoute()
 
-  const paths = ref(route.path.split('/').filter(path => path !== ''))
-
+  const paths = computed(() => route.path.split('/').filter(path => path !== ''))
   console.log(paths)
-  const getLink = computed(() => {
-    // if(path === 'das')
-  })
+  const getLink = (path) => {
+    if(path === 'dashboard') return '/dashboard'
+      return `/dashboard/${path}`
+  }
 </script>
 
 <template>
   <div class="flex justify-between items-center mt-9">
     <div>
-      <ul class="flex text-[#B3B3B3]">
-        <li v-for="path in paths">
-          <router-link :to="getLink" class="capitalize">{{path === 'dashboard' ? 'Home' : path}}</router-link>
-          <img :src="arrow" alt="">
+      <ul class="flex text-[#B3B3B3">
+        <li v-for="(path, index) in paths" :key="path" class="last:text-[#0267FF]">
+          <router-link :to="getLink(path)" class="capitalize">{{path === 'dashboard' ? 'Home' : path}}</router-link>
+          <img v-if="index !== (paths.length - 1)" :src="arrow" alt="">
         </li>
       </ul>
     </div>

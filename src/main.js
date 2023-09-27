@@ -15,7 +15,7 @@ const app = createApp(App)
 app.use(router)
 app.use(store)
 app.use(VueApexCharts)
-app.use(VCalendar, {})
+app.use(VCalendar)
 
 app.component('base-button', baseButton)
 app.component('the-header', TheHeader)
