@@ -1,9 +1,10 @@
 <script setup>
 
+import QuizzesComponent from "@/components/dashboard/quizzes/quizzesComponent.vue";
 </script>
 
 <template>
-<h1>Quizzes</h1>
+<quizzes-component></quizzes-component>
 </template>
 
 <style scoped>

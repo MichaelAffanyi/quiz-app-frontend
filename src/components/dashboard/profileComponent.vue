@@ -6,6 +6,9 @@ import DashboardCard from "@/components/dashboard/dashboardCard.vue";
 import Chart from "@/components/dashboard/chart.vue";
 import {ref} from "vue";
 import RecentQuizzes from "@/components/dashboard/recentQuizzes.vue";
+import {useStore} from "vuex";
+
+const store = useStore()
 
 const cards = [
   {
@@ -32,10 +35,12 @@ const date = ref({
   end: new Date(Date.now() + (1000 * 60 * 60 * 24 * 7))
 })
 
+const username = store.getters.getUser.name
+
 </script>
 
 <template>
-  <h1 class="font-semibold text-3xl">Hello John Doe</h1>
+  <h1 class="font-semibold text-3xl">Hello {{username}}</h1>
   <div class="grid grid-cols-3 mt-12">
     <dashboard-card v-for="card in cards" :key="card.name" :card="card"></dashboard-card>
   </div>

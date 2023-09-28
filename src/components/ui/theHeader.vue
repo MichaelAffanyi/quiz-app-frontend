@@ -2,13 +2,24 @@
 import logo from '@/assets/logo.svg'
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
+import {ref} from "vue";
 const store = useStore()
 const router = useRouter()
 const handleClick = () => {
   store.dispatch('setActive', 'login')
   router.push('/auth')
 }
-// const accessToken = cookies.get('accessToken')
+
+const toggleOpen = (event) => {
+  console.log(event)
+  isOpen.value = !isOpen.value
+}
+
+const isOpen = ref(false)
+
+const user = store.getters.getUser
+
+const hasUser = Object.keys(user).length > 0
 </script>
 
 <template>
@@ -22,7 +33,25 @@ const handleClick = () => {
       <span class="cursor-pointer hover:font-bold">About Us</span>
       <span class="cursor-pointer hover:font-bold">Contact Us</span>
     </nav>
-    <section class="flex gap-6 items-center">
+    <section v-if="hasUser" class="relative flex gap-6 items-center">
+      <h3>Hello {{user.name}}</h3>
+      <div @click="toggleOpen" class="w-14 h-14 rounded-full bg-red-200 overflow-hidden">
+        <img src="#" alt="" class="w-full h-full object-cover">
+      </div>
+      <div class="absolute right-0 bottom-0 w-4 h-4 rounded-full bg-green-500 border-2 border-white"></div>
+      <div v-if="isOpen" class="absolute min-w-[276px] top-20 right-0 px-6 py-4 bg-white rounded-lg shadow-xl">
+        <div class="flex gap-4 items-center">
+          <div class="w-14 h-14 rounded-full bg-red-200 overflow-hidden">
+            <img src="#" alt="" class="w-full h-full object-cover">
+          </div>
+          <span class="w-max">John Doe</span>
+        </div>
+        <h4 class="border-b pb-4">Profile</h4>
+        <h4 class="border-b py-4">Account Settings</h4>
+        <h4 class="py-4">Logout</h4>
+      </div>
+    </section>
+    <section v-else class="flex gap-6 items-center">
       <router-link to="/login" class="text-[#0267FF] cursor-pointer hover:bg-blue-50 p-2 rounded-lg" >Login</router-link>
       <router-link to="/register" class="bg-[#0267FF] p-2 text-white rounded-md hover:opacity-75">Register</router-link>
     </section>

@@ -5,6 +5,7 @@ import '@/views/authStyles.css'
 import {inject, ref} from "vue";
 import {authApi} from "@/utils";
 import {validateInput, validateOnInput} from "@/utils/validateInput";
+import {useRouter} from "vue-router";
 
   const store = useStore()
   const email = ref('')
@@ -21,6 +22,9 @@ import {validateInput, validateOnInput} from "@/utils/validateInput";
     },
   })
   const isError = ref(false)
+  const isLoading = ref(false)
+
+  const router = useRouter()
   const handleInput = (event) => {
     isError.value = false
     const value = event.target.value
@@ -28,6 +32,7 @@ import {validateInput, validateOnInput} from "@/utils/validateInput";
     validateOnInput({value, name, error})
   }
   const handleSubmit = async () => {
+    isLoading.value = true
     const isValid = validateInput(
     [
         {name: 'email', value: email},
@@ -45,8 +50,15 @@ import {validateInput, validateOnInput} from "@/utils/validateInput";
       }
       const res = await authApi.post('/login', user)
       console.log(res)
+      if(res?.status === 200) {
+        isLoading.value = false
+        console.log(res?.cookies)
+        store.commit('setUser', res?.data?.user)
+        await router.replace('/dashboard/profile')
+      }
     } catch (e) {
       isError.value = true
+      isLoading.value = false
       console.log(e)
     }
   }
@@ -104,7 +116,7 @@ import {validateInput, validateOnInput} from "@/utils/validateInput";
           <router-link to="/reset-password" class="ml-auto text-[#0267FF] cursor-pointer">Forgot password?</router-link>
         </div>
         <p v-if="isError" class="error max-w-[285px]">Oops! Your email or password appears to be incorrect. Please double-check your login details and try again.</p>
-        <base-button class="mt-4">Log in</base-button>
+        <base-button class="mt-4">{{isLoading ? 'Loading...' : 'Log in'}}</base-button>
       </form>
     </div>
   </div>
