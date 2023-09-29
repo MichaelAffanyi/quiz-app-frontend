@@ -1,5 +1,4 @@
 <script setup>
-import '@/views/authStyles.css'
 import signupHeader from "@/components/auth/signupHeader.vue";
 import registerImage from "@/assets/auth/register.png";
 import googleIcon from "@/assets/auth/google.svg";
@@ -7,6 +6,7 @@ import {ref, watch} from "vue";
 import {authApi} from '@/utils'
 import {useRouter} from "vue-router";
 import {validateOnInput, validateInput} from "@/utils/validateInput";
+import {useStore} from "vuex";
 
 const router = useRouter()
 const name = ref('')
@@ -36,6 +36,7 @@ const isSuccess = ref({
   message: ''
 })
 
+const store = useStore()
 const validateOnBlur = (event) => {
   isError.value.value = false
   isError.value.message = ''
@@ -62,12 +63,13 @@ const handleSubmit = async () => {
       password: password.value
     }
     const res = await authApi.post('/register', newUser)
-    console.log(res)
     if(res?.status === 200) {
       isSuccess.value.value = true
       isSuccess.value.message = res?.data?.msg
       setTimeout(() => {
-        router.replace('/login')
+        store.commit('setIsRegistered', true)
+        store.commit('setUser', res?.data?.user)
+        router.replace('/register/add-photo')
       }, 1000)
     }
   } catch (error) {

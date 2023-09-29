@@ -1,5 +1,4 @@
 <script setup>
-import "@/views/authStyles.css"
 import resetImage from "@/assets/auth/forgot-password.png";
 </script>
 

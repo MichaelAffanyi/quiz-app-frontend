@@ -1,4 +1,5 @@
 export default {
     activeComponent: '',
-    user: {}
+    user: {},
+    isRegistered: false
 }

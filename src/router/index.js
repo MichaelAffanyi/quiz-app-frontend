@@ -1,4 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router'
+import {useStore} from "vuex";
+
 
 const router = createRouter({
     routes: [
@@ -16,7 +18,31 @@ const router = createRouter({
         },
         {
             path: '/register',
-            component: () => import("@/views/register.vue")
+            component: () => import("@/views/register.vue"),
+            children: [
+                {
+                    path: 'add-photo',
+                    component: () => import("@/views/addPhoto.vue"),
+                    // beforeEnter: (to, from, next) => {
+                    //     const store = useStore()
+                    //     const isRegistered = store.getters.isRegistered
+                    //     if(!isRegistered) {
+                    //         next('/register')
+                    //     }
+                    //     else {
+                    //         next()
+                    //     }
+                    // }
+                },
+                {
+                    path: 'add-purpose',
+                    component: () => import("@/views/addPurpose.vue")
+                },
+                {
+                    path: 'add-interest',
+                    component: () => import("@/views/addInterest.vue")
+                }
+            ]
         },
         {
             path: '/reset-password',

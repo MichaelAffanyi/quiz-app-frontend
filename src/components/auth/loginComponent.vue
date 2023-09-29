@@ -1,5 +1,4 @@
 <script setup>
-import '@/views/authStyles.css'
   import loginImage from "@/assets/auth/login.png"
   import {useStore} from "vuex";
 import {inject, ref} from "vue";

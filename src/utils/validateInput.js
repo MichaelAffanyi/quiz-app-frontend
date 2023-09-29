@@ -8,7 +8,6 @@ export const validateInput = (inputs, errors) => {
             isValid = false
         }
     })
-    console.log(isValid)
     return isValid
 }
 
