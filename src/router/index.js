@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {useStore} from "vuex";
+import {beforeEnter} from "@/utils/helpers"
 
 
 const router = createRouter({
@@ -23,16 +23,7 @@ const router = createRouter({
                 {
                     path: 'add-photo',
                     component: () => import("@/views/addPhoto.vue"),
-                    // beforeEnter: (to, from, next) => {
-                    //     const store = useStore()
-                    //     const isRegistered = store.getters.isRegistered
-                    //     if(!isRegistered) {
-                    //         next('/register')
-                    //     }
-                    //     else {
-                    //         next()
-                    //     }
-                    // }
+                    beforeEnter
                 },
                 {
                     path: 'add-purpose',

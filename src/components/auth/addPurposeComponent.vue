@@ -3,8 +3,13 @@ import purposeIcon from "@/assets/auth/interest1.png"
 import SignupHeader from "@/components/auth/signupHeader.vue";
 import PurposeCard from "@/components/ui/purposeCard.vue";
 import {ref, watch} from "vue";
+import {authApi} from "@/utils";
+import {useStore} from "vuex";
 
 const selectedPurposes = ref([])
+const store = useStore()
+
+const {id} = store.getters.getUser
 
 const addToSelected = (purpose) => {
   const index = selectedPurposes.value.findIndex(ele => ele === purpose.toLowerCase())
@@ -13,6 +18,19 @@ const addToSelected = (purpose) => {
     return
   }
   selectedPurposes.value.push(purpose.toLowerCase())
+}
+
+const handleCLick = async () => {
+  if(selectedPurposes.value.length > 1) return
+  try {
+    const res = await authApi.post('/add-purpose', {
+      id,
+      purpose: selectedPurposes
+    })
+    console.log(res)
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 </script>
@@ -33,7 +51,7 @@ const addToSelected = (purpose) => {
           <purpose-card @add-to-selected="addToSelected" title="Entertainment and Fun "></purpose-card>
           <purpose-card @add-to-selected="addToSelected" title="Rewards and recognition"></purpose-card>
         </div>
-        <base-button class="mt-20">Continue</base-button>
+        <base-button @click="handleCLick" class="mt-20">Continue</base-button>
       </div>
     </section>
   </div>
