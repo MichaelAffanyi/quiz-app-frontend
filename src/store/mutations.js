@@ -10,3 +10,7 @@ export const setUser = (state, payload) => {
 export const setIsRegistered = (state, payload) => {
     state.isRegistered = payload
 }
+
+export const setStep = (state, payload) => {
+    state.step = payload
+}

@@ -66,9 +66,8 @@ const handleSubmit = async () => {
     if(res?.status === 200) {
       isSuccess.value.value = true
       isSuccess.value.message = res?.data?.msg
+      store.commit('setIsRegistered', true)
       setTimeout(() => {
-        store.commit('setIsRegistered', true)
-        store.commit('setUser', res?.data?.user)
         router.replace('/register/add-photo')
       }, 1000)
     }
@@ -83,7 +82,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="flex w-screen h-screen">
+  <div class="flex w-screen h-screen overflow-hidden">
     <div class="image">
       <img :src="registerImage" alt="">
     </div>

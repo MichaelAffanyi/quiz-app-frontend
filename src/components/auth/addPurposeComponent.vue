@@ -5,9 +5,12 @@ import PurposeCard from "@/components/ui/purposeCard.vue";
 import {ref, watch} from "vue";
 import {authApi} from "@/utils";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 const selectedPurposes = ref([])
+const isLoading = ref(false)
 const store = useStore()
+const router = useRouter()
 
 const {id} = store.getters.getUser
 
@@ -21,14 +24,20 @@ const addToSelected = (purpose) => {
 }
 
 const handleCLick = async () => {
-  if(selectedPurposes.value.length > 1) return
+  if(selectedPurposes.value.length < 1) return
   try {
+    isLoading.value = true
     const res = await authApi.post('/add-purpose', {
       id,
-      purpose: selectedPurposes
+      purpose: selectedPurposes.value
     })
     console.log(res)
+    if(res?.status === 200) {
+      isLoading.value = false
+      router.replace('/register/add-interest')
+    }
   } catch (e) {
+    isLoading.value = false
     console.log(e)
   }
 }
@@ -51,7 +60,7 @@ const handleCLick = async () => {
           <purpose-card @add-to-selected="addToSelected" title="Entertainment and Fun "></purpose-card>
           <purpose-card @add-to-selected="addToSelected" title="Rewards and recognition"></purpose-card>
         </div>
-        <base-button @click="handleCLick" class="mt-20">Continue</base-button>
+        <base-button @click="handleCLick" class="mt-20">{{isLoading ? 'Adding...' : 'Continue'}}</base-button>
       </div>
     </section>
   </div>

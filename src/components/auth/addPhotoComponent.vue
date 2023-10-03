@@ -15,7 +15,6 @@
 
   const user = store.getters.getUser
   const handleChange = (event) => {
-    console.log(event.target.files[0])
     profilePhoto.value = event.target.files[0]
   }
 
@@ -28,13 +27,11 @@
   const uploadProfile = async () => {
     if(!profilePhoto.value) return
     const profilePhotoForm = new FormData()
-    profilePhotoForm.set('id', user.id)
     profilePhotoForm.set('image', profilePhoto.value)
 
     try {
       isLoading.value = true
       const res = await authApi.post('/upload-photo', profilePhotoForm)
-      console.log(res)
       if(res?.status === 200) {
         router.replace('/register/add-purpose')
       }
@@ -62,11 +59,11 @@
         </label>
         <input @change="handleChange" hidden="" type="file" name="profile" id="profile">
       </div>
-      <div class="absolute bottom-8">
+      <div class="absolute bottom-8 flex flex-col gap-2">
         <label :for="!profilePhoto ? 'profile' : ''" @click="uploadProfile" class="bg-[#0267FF] px-14 py-3 text-white rounded-md">
           {{buttonText}}
         </label>
-        <h4 class="text-sm text-center mt-3">Skip</h4>
+        <router-link v-if="!profilePhoto" to="/register/add-purpose" class="text-sm text-center mt-3 cursor-pointer">Skip</router-link>
       </div>
     </div>
   </section>

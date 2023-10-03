@@ -10,3 +10,7 @@ export const getUser = (state) => {
 export const isRegistered = (state) => {
     return state.isRegistered
 }
+
+export const getStep = (state) => {
+    return state.step
+}

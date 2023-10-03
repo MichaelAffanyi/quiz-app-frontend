@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {beforeEnter} from "@/utils/helpers"
+import {beforeRegisterEnter, beforeDashboardEnter} from "@/utils/helpers"
 
 
 const router = createRouter({
@@ -23,15 +23,22 @@ const router = createRouter({
                 {
                     path: 'add-photo',
                     component: () => import("@/views/addPhoto.vue"),
-                    beforeEnter
+                    beforeEnter: beforeRegisterEnter
                 },
                 {
                     path: 'add-purpose',
-                    component: () => import("@/views/addPurpose.vue")
+                    component: () => import("@/views/addPurpose.vue"),
+                    beforeEnter: beforeRegisterEnter
                 },
                 {
                     path: 'add-interest',
-                    component: () => import("@/views/addInterest.vue")
+                    component: () => import("@/views/addInterest.vue"),
+                    beforeEnter: beforeRegisterEnter
+                },
+                {
+                    path: 'off-boarding',
+                    component: () => import("@/components/auth/offBoarding.vue"),
+                    beforeEnter: beforeRegisterEnter
                 }
             ]
         },
@@ -46,6 +53,7 @@ const router = createRouter({
         {
             path: '/dashboard',
             component: () => import('@/views/dashboard.vue'),
+            beforeEnter: beforeDashboardEnter,
             children: [
                 {
                     path: 'profile',

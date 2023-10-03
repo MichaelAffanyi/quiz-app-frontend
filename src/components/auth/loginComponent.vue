@@ -1,12 +1,14 @@
 <script setup>
   import loginImage from "@/assets/auth/login.png"
   import {useStore} from "vuex";
-import {inject, ref} from "vue";
-import {authApi} from "@/utils";
-import {validateInput, validateOnInput} from "@/utils/validateInput";
-import {useRouter} from "vue-router";
+  import {inject, ref} from "vue";
+  import {authApi} from "@/utils";
+  import {validateInput, validateOnInput} from "@/utils/validateInput";
+  import {useRouter} from "vue-router";
+  import axios from "axios";
 
   const store = useStore()
+  const router = useRouter()
   const email = ref('')
   const password = ref('')
   const rememberMe = ref(false)
@@ -23,7 +25,6 @@ import {useRouter} from "vue-router";
   const isError = ref(false)
   const isLoading = ref(false)
 
-  const router = useRouter()
   const handleInput = (event) => {
     isError.value = false
     const value = event.target.value
@@ -48,12 +49,9 @@ import {useRouter} from "vue-router";
         rememberMe: rememberMe.value
       }
       const res = await authApi.post('/login', user)
-      console.log(res)
       if(res?.status === 200) {
         isLoading.value = false
-        console.log(res?.cookies)
-        store.commit('setUser', res?.data?.user)
-        await router.replace('/dashboard/profile')
+        router.push('/dashboard/profile')
       }
     } catch (e) {
       isError.value = true
@@ -65,7 +63,7 @@ import {useRouter} from "vue-router";
 </script>
 
 <template>
-  <div class="flex w-screen h-screen">
+  <div class="flex w-screen h-screen overflow-hidden">
     <div class="image">
       <img :src="loginImage" alt="">
     </div>

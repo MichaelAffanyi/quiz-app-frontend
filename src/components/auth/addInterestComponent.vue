@@ -3,8 +3,17 @@
   import InterestCard from "@/components/ui/interestCard.vue";
   import SignupHeader from "@/components/auth/signupHeader.vue";
   import {ref, watch} from "vue";
+  import {authApi} from "@/utils";
+  import {useStore} from "vuex";
+  import {useRouter} from "vue-router";
 
   const selected = ref([])
+  const isLoading = ref(false)
+  const router = useRouter()
+
+  const store = useStore()
+
+  const {id} = store.getters.getUser
 
   const addToSelected = (interest) => {
     const index = selected.value.findIndex(ele => ele === interest.toLowerCase())
@@ -13,7 +22,26 @@
       return
     }
     selected.value.push(interest.toLowerCase())
-  } 
+  }
+
+  const handleClick = async () => {
+    if(selected.value.length < 1) return
+    try {
+      isLoading.value = true
+      const res = await authApi.post('/add-interests', {
+        id,
+        interests: selected.value
+      })
+      console.log(res)
+      isLoading.value = false
+      if(res?.status === 200) {
+        router.push('/register/off-boarding')
+      }
+    } catch (e) {
+      isLoading.value = false
+      console.log(e)
+    }
+  }
 </script>
 
 <template>
@@ -32,7 +60,7 @@
         <interest-card @add-to-selected="addToSelected" title="Music"></interest-card>
         <interest-card @add-to-selected="addToSelected" title="Reading"></interest-card>
       </div>
-      <base-button class="mt-8">Continue</base-button>
+      <base-button @click="handleClick" class="mt-8">{{isLoading ? 'Adding...' : 'Continue'}}</base-button>
     </div>
   </section>
 </div>

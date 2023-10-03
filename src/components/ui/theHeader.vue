@@ -3,11 +3,18 @@ import logo from '@/assets/logo.svg'
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {ref} from "vue";
+import {authApi} from "@/utils";
 const store = useStore()
 const router = useRouter()
 const handleClick = () => {
   store.dispatch('setActive', 'login')
   router.push('/auth')
+}
+
+const handleLogout = async () => {
+  // console.dir(document)
+  await authApi('/logout')
+  location.reload()
 }
 
 const toggleOpen = (event) => {
@@ -18,8 +25,9 @@ const toggleOpen = (event) => {
 const isOpen = ref(false)
 
 const user = store.getters.getUser
+console.log(user)
 
-const hasUser = Object.keys(user).length > 0
+// const hasUser = Object.keys(user).length > 0
 </script>
 
 <template>
@@ -33,22 +41,22 @@ const hasUser = Object.keys(user).length > 0
       <span class="cursor-pointer hover:font-bold">About Us</span>
       <span class="cursor-pointer hover:font-bold">Contact Us</span>
     </nav>
-    <section v-if="hasUser" class="relative flex gap-6 items-center">
+    <section v-if="user" class="relative flex gap-6 items-center">
       <h3>Hello {{user.name}}</h3>
       <div @click="toggleOpen" class="w-14 h-14 rounded-full bg-red-200 overflow-hidden">
-        <img src="#" alt="" class="w-full h-full object-cover">
+        <img :src="user?.profilePhoto" alt="" class="w-full h-full object-cover">
       </div>
       <div class="absolute right-0 bottom-0 w-4 h-4 rounded-full bg-green-500 border-2 border-white"></div>
       <div v-if="isOpen" class="absolute min-w-[276px] top-20 right-0 px-6 py-4 bg-white rounded-lg shadow-xl">
-        <div class="flex gap-4 items-center">
+        <div class="flex gap-4 items-center mb-6">
           <div class="w-14 h-14 rounded-full bg-red-200 overflow-hidden">
-            <img src="#" alt="" class="w-full h-full object-cover">
+            <img :src="user?.profilePhoto" alt="" class="w-full h-full object-cover">
           </div>
-          <span class="w-max">John Doe</span>
+          <span class="w-max">{{user?.name}}</span>
         </div>
-        <h4 class="border-b pb-4">Profile</h4>
-        <h4 class="border-b py-4">Account Settings</h4>
-        <h4 class="py-4">Logout</h4>
+        <h4 class="border-b pb-4 cursor-pointer">Profile</h4>
+        <h4 class="border-b py-4 cursor-pointer">Account Settings</h4>
+        <h4 @click="handleLogout" class="py-4 cursor-pointer">Logout</h4>
       </div>
     </section>
     <section v-else class="flex gap-6 items-center">
