@@ -2,9 +2,18 @@
   import arrow from "@/assets/arrow-right.svg"
   import {useRoute} from "vue-router";
   import {computed, ref} from "vue";
+  import {useStore} from "vuex";
   const route = useRoute()
+  const store = useStore()
+
+  const user = store.getters.getUser
 
   const paths = computed(() => route.path.split('/').filter(path => path !== ''))
+  const pathText = computed(() => (path) => {
+    if(path === 'dashboard') return 'Home'
+    if(path === 'profile' && paths.value.at(-1) === 'account-settings') return user.name
+    return path.split('-')[0]
+  })
   console.log(paths)
   const getLink = (path) => {
     if(path === 'dashboard') return '/dashboard'
@@ -17,7 +26,7 @@
     <div>
       <ul class="flex text-[#B3B3B3">
         <li v-for="(path, index) in paths" :key="path" class="last:text-[#0267FF]">
-          <router-link :to="getLink(path)" class="capitalize">{{path === 'dashboard' ? 'Home' : path}}</router-link>
+          <router-link :to="getLink(path)" class="capitalize">{{pathText(path)}}</router-link>
           <img v-if="index !== (paths.length - 1)" :src="arrow" alt="">
         </li>
       </ul>

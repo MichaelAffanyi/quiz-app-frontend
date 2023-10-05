@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {beforeRegisterEnter, beforeDashboardEnter} from "@/utils/helpers"
+import {beforeRegisterEnter, beforeDashboardEnter, beforeLoginEnter} from "@/utils/helpers"
 
 
 const router = createRouter({
@@ -14,7 +14,8 @@ const router = createRouter({
         },
         {
             path: '/login',
-            component: () => import("@/views/login.vue")
+            component: () => import("@/views/login.vue"),
+            beforeEnter: beforeLoginEnter
         },
         {
             path: '/register',
@@ -62,6 +63,10 @@ const router = createRouter({
                 {
                     path: 'profile/quizzes',
                     component: () => import("@/views/quizzes.vue")
+                },
+                {
+                    path: 'profile/account-settings',
+                    component: () => import("@/views/accountSettings.vue")
                 }
             ]
         }

@@ -6,9 +6,9 @@ import {ref} from "vue";
 import {authApi} from "@/utils";
 const store = useStore()
 const router = useRouter()
-const handleClick = () => {
-  store.dispatch('setActive', 'login')
-  router.push('/auth')
+const handleClick = (link) => {
+  router.push(link)
+  toggleOpen()
 }
 
 const handleLogout = async () => {
@@ -18,14 +18,14 @@ const handleLogout = async () => {
 }
 
 const toggleOpen = (event) => {
-  console.log(event)
+  // console.log(event)
   isOpen.value = !isOpen.value
 }
 
 const isOpen = ref(false)
 
 const user = store.getters.getUser
-console.log(user)
+const hasUser = Object.keys(user).length > 0
 
 // const hasUser = Object.keys(user).length > 0
 </script>
@@ -41,9 +41,9 @@ console.log(user)
       <span class="cursor-pointer hover:font-bold">About Us</span>
       <span class="cursor-pointer hover:font-bold">Contact Us</span>
     </nav>
-    <section v-if="user" class="relative flex gap-6 items-center">
+    <section v-if="hasUser" class="relative flex gap-6 items-center">
       <h3>Hello {{user.name}}</h3>
-      <div @click="toggleOpen" class="w-14 h-14 rounded-full bg-red-200 overflow-hidden">
+      <div @click="toggleOpen" class="w-14 h-14 rounded-full bg-red-200 overflow-hidden cursor-pointer">
         <img :src="user?.profilePhoto" alt="" class="w-full h-full object-cover">
       </div>
       <div class="absolute right-0 bottom-0 w-4 h-4 rounded-full bg-green-500 border-2 border-white"></div>
@@ -54,9 +54,9 @@ console.log(user)
           </div>
           <span class="w-max">{{user?.name}}</span>
         </div>
-        <h4 class="border-b pb-4 cursor-pointer">Profile</h4>
-        <h4 class="border-b py-4 cursor-pointer">Account Settings</h4>
-        <h4 @click="handleLogout" class="py-4 cursor-pointer">Logout</h4>
+        <h4 @click="handleClick('/dashboard/profile')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Profile</h4>
+        <h4 @click="handleClick('/dashboard/profile/account-settings')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Account Settings</h4>
+        <h4 @click="handleLogout" class="py-3 px-2 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Logout</h4>
       </div>
     </section>
     <section v-else class="flex gap-6 items-center">

@@ -35,3 +35,12 @@ export const beforeDashboardEnter = async (to, from, next) => {
     //     next()
     // }
 }
+
+export const beforeLoginEnter = (to, from, next) => {
+    const hasAccess = document.cookie.split(';').some(ele => ele.split("=")[0] === 'accessToken')
+    if(hasAccess) {
+       next('/dashboard/profile')
+    } else {
+        next()
+    }
+}
