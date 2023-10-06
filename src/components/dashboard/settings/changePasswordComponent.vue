@@ -1,23 +1,81 @@
 <script setup>
 
+import {validateInput} from "@/utils/validateInput";
+import {ref} from "vue";
+import {settingsApi} from "@/utils";
+import {handleInput} from "@/utils/helpers";
+const oldPassword = ref('')
+const newPassword = ref('')
+const confirmPassword = ref('')
+const isLoading = ref(false)
+const isSuccess = ref('')
+const isError = ref('')
+const errors = ref({oldPassword: {}, newPassword: {}, confirmPassword: {}})
+
+const handleSubmit = async () => {
+  const isValid = validateInput([
+    {name: 'oldPassword', value: oldPassword},
+    {name: 'newPassword', value: newPassword},
+    {name: 'confirmPassword', value: confirmPassword}
+  ], errors)
+  if (!isValid) return
+
+  try {
+    isLoading.value = true
+    const data = {
+      oldPassword: oldPassword.value,
+      newPassword: newPassword.value,
+      confirmPassword: confirmPassword.value
+    }
+    const res = await settingsApi.post('/change-password', data)
+    if(res?.status === 200) {
+      isLoading.value = false
+      isSuccess.value = "Password updated successfully"
+      setTimeout(() => {
+        isSuccess.value = ''
+        oldPassword.value = ''
+        newPassword.value = ''
+        confirmPassword.value = ''
+      }, 1500)
+    }
+  } catch (e) {
+    console.log(e)
+    isLoading.value = false
+    isError.value = e?.response?.data?.error
+    setTimeout(() => {
+      isError.value = ''
+    }, 1500)
+  }
+}
+
+const onInput = (event) => {
+  handleInput(event, errors)
+}
 </script>
 
 <template>
-  <form action="" class="flex flex-col gap-12">
-    <div class="input-container">
-      <label for="current">Current Password*</label>
-      <input type="text" name="current" id="current">
-    </div>
-    <div class="input-container">
-      <label for="newPassword">New Password*</label>
-      <input type="text" name="newPassword" id="newPassword">
-    </div>
-    <div class="input-container">
-      <label for="confirm">Confirm New Password*</label>
-      <input type="text" name="confirm" id="confirm">
-    </div>
-    <button class="btn">Save changes</button>
-  </form>
+  <div>
+    <p class="success mb-4" v-if="!!isSuccess">{{isSuccess}}</p>
+    <p class="error mb-4" v-if="!!isError">{{isError}}</p>
+    <form @submit.prevent="handleSubmit" action="" class="flex flex-col gap-12">
+      <div class="input-container">
+        <label for="current">Current Password*</label>
+        <input @input="onInput" v-model="oldPassword" type="password" name="oldPassword" id="current">
+        <p v-if="errors.oldPassword.isError" class="error">{{errors.oldPassword.message}}</p>
+      </div>
+      <div class="input-container">
+        <label for="newPassword">New Password*</label>
+        <input @input="onInput" v-model="newPassword" type="password" name="newPassword" id="newPassword">
+        <p v-if="errors.newPassword.isError" class="error">{{errors.newPassword.message}}</p>
+      </div>
+      <div class="input-container">
+        <label for="confirm">Confirm New Password*</label>
+        <input @input="onInput" v-model="confirmPassword" type="password" name="confirmPassword" id="confirm">
+        <p v-if="errors.confirmPassword.isError" class="error">{{errors.confirmPassword.message}}</p>
+      </div>
+      <button class="btn">{{isLoading ? 'Saving...' : 'Save changes'}}</button>
+    </form>
+  </div>
 </template>
 
 <style scoped>
@@ -28,5 +86,10 @@
 
   .btn {
     margin-left: auto;
+  }
+
+  .success {
+    color: #33FF33;
+    font-size: 14px;
   }
 </style>

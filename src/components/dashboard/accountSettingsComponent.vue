@@ -7,6 +7,7 @@
   import generalComponent from "@/components/dashboard/settings/generalComponent.vue";
   import passwordComponent from "@/components/dashboard/settings/changePasswordComponent.vue";
   import quizzesComponent from "@/components/dashboard/settings/quizzesComponent.vue";
+  import {mapGetters} from "vuex";
 
   export default {
     data() {
@@ -26,14 +27,8 @@
             name: 'quizzes',
             title: 'My Quizzes',
             icon: 'quizzesIcon'
-          },
-          {
-            name: 'delete',
-            title: 'Delete Account',
-            icon: 'deleteIcon'
           }
         ],
-        user: this.$store.getters.getUser,
         activeTab: 'general'
       }
     },
@@ -46,9 +41,15 @@
       quizzesIcon,
       deleteIcon
     },
+    computed: {
+      ...mapGetters(['getUser'])
+    },
     methods: {
       setActive(tab) {
         this.activeTab = tab
+      },
+      openModal() {
+        this.$store.commit('toggleDeleteModal')
       }
     }
   }
@@ -59,11 +60,11 @@
     <div class="w-max h-max">
       <div class="flex gap-6 items-center">
         <div class="w-[88px] h-[88px] img-container">
-          <img :src="user.profilePhoto" alt="">
+          <img :src="getUser.profilePhoto" alt="">
         </div>
         <div>
-          <p class="font-semibold text-lg">John Doe</p>
-          <p>johndoe@gmail.com</p>
+          <p class="font-semibold text-lg">{{getUser.name}}</p>
+          <p>{{getUser.email}}</p>
         </div>
       </div>
       <div class="flex gap-24 mt-10">
@@ -71,6 +72,10 @@
           <span v-for="nav in navs" class="nav" :class="{active: activeTab === nav.name}" @click="setActive(nav.name)">
             <component :is="nav.icon"></component>
             {{ nav.title }}
+          </span>
+            <span @click="openModal" class="flex gap-2 items-center text-[#E60000] font-semibold w-max hover:bg-[#F2F2F2] p-2 cursor-pointer rounded-lg">
+            <delete-icon></delete-icon>
+            Delete Account
           </span>
         </div>
 <!--        <general-component :user="user"></general-component>-->
@@ -100,14 +105,6 @@
 
 .active :deep(svg path), .nav:hover :deep(svg path) {
   fill: #0267FF;
-}
-
-.nav:last-child {
-  color: #FF0000;
-}
-
-.nav:last-child:hover :deep(svg path) {
-  fill: #FF0000;
 }
 
 :deep(.img-container) {
@@ -148,5 +145,13 @@
 
 :deep(.input-container input:focus) {
   outline: none;
+}
+
+:deep(.error) {
+  color: #FF4D4D;
+  font-size: 14px;
+}
+:deep(.errorInput) {
+  border: 1px solid #FF4D4D;
 }
 </style>

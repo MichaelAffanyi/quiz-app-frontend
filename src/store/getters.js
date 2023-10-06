@@ -14,3 +14,7 @@ export const isRegistered = (state) => {
 export const getStep = (state) => {
     return state.step
 }
+
+export const isDeleteModalOpen = (state) => {
+    return state.openDeleteModal
+}

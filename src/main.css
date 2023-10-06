@@ -73,3 +73,11 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.error {
+    color: #FF4D4D;
+    font-size: 14px;
+}
+.errorInput {
+    border: 1px solid #FF4D4D;
+}

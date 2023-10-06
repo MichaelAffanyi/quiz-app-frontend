@@ -2,7 +2,7 @@
 import logo from '@/assets/logo.svg'
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {authApi} from "@/utils";
 const store = useStore()
 const router = useRouter()
@@ -24,7 +24,7 @@ const toggleOpen = (event) => {
 
 const isOpen = ref(false)
 
-const user = store.getters.getUser
+const user = computed(() => store.getters.getUser)
 const hasUser = Object.keys(user).length > 0
 
 // const hasUser = Object.keys(user).length > 0
@@ -47,7 +47,7 @@ const hasUser = Object.keys(user).length > 0
         <img :src="user?.profilePhoto" alt="" class="w-full h-full object-cover">
       </div>
       <div class="absolute right-0 bottom-0 w-4 h-4 rounded-full bg-green-500 border-2 border-white"></div>
-      <div v-if="isOpen" class="absolute min-w-[276px] top-20 right-0 px-6 py-4 bg-white rounded-lg shadow-xl">
+      <div v-if="isOpen" class="absolute min-w-[276px] top-20 right-0 px-6 py-4 bg-white rounded-lg shadow-xl z-30">
         <div class="flex gap-4 items-center mb-6">
           <div class="w-14 h-14 rounded-full bg-red-200 overflow-hidden">
             <img :src="user?.profilePhoto" alt="" class="w-full h-full object-cover">

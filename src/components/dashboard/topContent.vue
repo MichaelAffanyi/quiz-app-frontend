@@ -14,7 +14,6 @@
     if(path === 'profile' && paths.value.at(-1) === 'account-settings') return user.name
     return path.split('-')[0]
   })
-  console.log(paths)
   const getLink = (path) => {
     if(path === 'dashboard') return '/dashboard'
       return `/dashboard/${path}`
