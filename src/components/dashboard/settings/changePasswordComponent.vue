@@ -87,9 +87,4 @@ const onInput = (event) => {
   .btn {
     margin-left: auto;
   }
-
-  .success {
-    color: #33FF33;
-    font-size: 14px;
-  }
 </style>

@@ -60,7 +60,7 @@
         <input @change="handleChange" hidden="" type="file" name="profile" id="profile">
       </div>
       <div class="absolute bottom-8 flex flex-col gap-2">
-        <label :for="!profilePhoto ? 'profile' : ''" @click="uploadProfile" class="bg-[#0267FF] px-14 py-3 text-white rounded-md">
+        <label :for="!profilePhoto ? 'profile' : ''" @click="uploadProfile" class="bg-[#0267FF] px-14 py-3 text-white rounded-md cursor-pointer">
           {{buttonText}}
         </label>
         <router-link v-if="!profilePhoto" to="/register/add-purpose" class="text-sm text-center mt-3 cursor-pointer">Skip</router-link>

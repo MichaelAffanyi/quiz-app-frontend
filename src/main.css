@@ -81,3 +81,7 @@ body {
 .errorInput {
     border: 1px solid #FF4D4D;
 }
+.success {
+    color: #33FF33;
+    font-size: 14px;
+}
