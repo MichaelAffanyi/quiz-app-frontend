@@ -12,7 +12,6 @@ const currentRoute = computed(() => route.path.split('/').at(-1).split('-'))
   <the-header class="shadow-lg"></the-header>
   <base-banner class="capitalize">
     <span v-for="route in currentRoute">{{route + ' ' }}</span>
-<!--    <span>Hello</span>-->
   </base-banner>
   <div class="px-16">
     <top-content></top-content>

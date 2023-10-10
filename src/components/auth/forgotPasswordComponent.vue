@@ -43,7 +43,7 @@ const handleSubmit = async () => {
         <h2 class="text-[#A6A6A6]">"Oops, I totally forgot my password - time for a quick reset!"</h2>
         <div class="auth-form-control">
           <label for="email">Email</label>
-          <input v-model="email" type="text" name="email" id="email" placeholder="Enter your email">
+          <input @input="validateOnInput({value: $event.target.value, name: $event.target.name, error})" v-model="email" type="text" name="email" id="email" placeholder="Enter your email">
           <p class="error mt-2" v-if="error.email.isError">{{error.email.message}}</p>
           <p class="success mt-2" v-if="!!isSuccess">{{isSuccess}}</p>
         </div>

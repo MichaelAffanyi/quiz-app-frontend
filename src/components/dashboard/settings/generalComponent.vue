@@ -3,7 +3,7 @@
 // defineProps(['user'])
 import {useStore} from "vuex";
 import {computed, ref, watch} from "vue";
-import {validateInput} from "@/utils/validateInput";
+import {validateInput, validateOnInput} from "@/utils/validateInput";
 import {authApi, settingsApi} from "@/utils";
 import {handleInput} from "@/utils/helpers";
 
@@ -87,10 +87,6 @@ const handleSubmit = async () => {
   }
 }
 
-const onInput = (event) => {
-  handleInput(event, errors)
-}
-
 </script>
 
 <template>
@@ -109,12 +105,12 @@ const onInput = (event) => {
     <form @submit.prevent="handleSubmit" action="" class="grid grid-cols-2 gap-x-6 gap-y-10 mt-8">
       <div class="input-container">
         <label for="fullname">Full Name*</label>
-        <input @input="onInput" v-model="name" type="text" name="name" id="name" :class="{errorInput: errors.name.isError}">
+        <input @input="validateOnInput({value: $event.target.value, name: $event.target.name, error: errors})" v-model="name" type="text" name="name" id="name" :class="{errorInput: errors.name.isError}">
         <p class="error" v-if="errors.name.isError">{{errors.name.message}}</p>
       </div>
       <div class="input-container">
         <label for="email">Email*</label>
-        <input @input="onInput" v-model="email" type="text" name="email" id="email" :class="{errorInput: errors.email.isError}">
+        <input @input="validateOnInput({value: $event.target.value, name: $event.target.name, error: errors})" v-model="email" type="text" name="email" id="email" :class="{errorInput: errors.email.isError}">
         <p class="error" v-if="errors.email.isError">{{errors.email.message}}</p>
       </div>
       <div class="input-container">

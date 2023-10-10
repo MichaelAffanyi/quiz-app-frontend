@@ -25,12 +25,6 @@
   const isError = ref(false)
   const isLoading = ref(false)
 
-  const handleInput = (event) => {
-    isError.value = false
-    const value = event.target.value
-    const name = event.target.name
-    validateOnInput({value, name, error})
-  }
   const handleSubmit = async () => {
     isLoading.value = true
     const isValid = validateInput(
@@ -81,7 +75,7 @@
               name="email" id="email"
               placeholder="Enter your email"
               v-model="email"
-              @input="handleInput"
+              @input="validateOnInput({value: $event.target.value, name: $event.target.name, error})"
               :class="{errorInput: error.email.isError}"
           >
           <p class="error" v-if="error.email.isError">{{error.email.message}}</p>
@@ -94,7 +88,7 @@
               id="password"
               placeholder="********"
               v-model="password"
-              @input="handleInput"
+              @input="validateOnInput({value: $event.target.value, name: $event.target.name, error})"
               :class="{errorInput: error.password.isError}"
           >
           <p class="error" v-if="error.password.isError">{{error.password.message}}</p>

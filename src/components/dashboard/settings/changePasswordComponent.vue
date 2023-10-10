@@ -1,6 +1,6 @@
 <script setup>
 
-import {validateInput} from "@/utils/validateInput";
+import {validateInput, validateOnInput} from "@/utils/validateInput";
 import {ref} from "vue";
 import {settingsApi} from "@/utils";
 import {handleInput} from "@/utils/helpers";
@@ -47,10 +47,6 @@ const handleSubmit = async () => {
     }, 1500)
   }
 }
-
-const onInput = (event) => {
-  handleInput(event, errors)
-}
 </script>
 
 <template>
@@ -60,17 +56,17 @@ const onInput = (event) => {
     <form @submit.prevent="handleSubmit" action="" class="flex flex-col gap-12">
       <div class="input-container">
         <label for="current">Current Password*</label>
-        <input @input="onInput" v-model="oldPassword" type="password" name="oldPassword" id="current">
+        <input @input="validateOnInput({value: $event.target.value, name: $event.target.name, error: errors})" v-model="oldPassword" type="password" name="oldPassword" id="current">
         <p v-if="errors.oldPassword.isError" class="error">{{errors.oldPassword.message}}</p>
       </div>
       <div class="input-container">
         <label for="newPassword">New Password*</label>
-        <input @input="onInput" v-model="newPassword" type="password" name="newPassword" id="newPassword">
+        <input @input="validateOnInput({value: $event.target.value, name: $event.target.name, error: errors})" v-model="newPassword" type="password" name="newPassword" id="newPassword">
         <p v-if="errors.newPassword.isError" class="error">{{errors.newPassword.message}}</p>
       </div>
       <div class="input-container">
         <label for="confirm">Confirm New Password*</label>
-        <input @input="onInput" v-model="confirmPassword" type="password" name="confirmPassword" id="confirm">
+        <input @input="validateOnInput({value: $event.target.value, name: $event.target.name, error: errors})" v-model="confirmPassword" type="password" name="confirmPassword" id="confirm">
         <p v-if="errors.confirmPassword.isError" class="error">{{errors.confirmPassword.message}}</p>
       </div>
       <button class="btn">{{isLoading ? 'Saving...' : 'Save changes'}}</button>

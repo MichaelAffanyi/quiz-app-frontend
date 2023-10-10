@@ -12,13 +12,12 @@ export const validateInput = (inputs, errors) => {
 }
 
 export const validateOnInput = ({value, name, error}) => {
-    // console.log(error)
     if(!value) {
-        error.value[name].isError = true
-        error.value[name].message = `Please enter ${name}`
+        error[name].isError = true
+        error[name].message = `Please enter ${name}`
     }
     else {
-        error.value[name].isError = false
-        error.value[name].message = ''
+        error[name].isError = false
+        error[name].message = ''
     }
 }

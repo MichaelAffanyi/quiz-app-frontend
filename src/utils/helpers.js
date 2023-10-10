@@ -1,6 +1,7 @@
 import {useStore} from "vuex";
 import {authApi} from "@/utils/index";
 import {validateOnInput} from "@/utils/validateInput";
+import {useRoute} from "vue-router";
 
 export const beforeRegisterEnter = (to, from, next) => {
     const store = useStore()

@@ -37,13 +37,13 @@ const isSuccess = ref({
 })
 
 const store = useStore()
-const validateOnBlur = (event) => {
-  isError.value.value = false
-  isError.value.message = ''
-  const value = event.target.value
-  const name = event.target.name
-  validateOnInput({value, name, error})
-}
+// const validateOnBlur = (event) => {
+//   isError.value.value = false
+//   isError.value.message = ''
+//   const value = event.target.value
+//   const name = event.target.name
+//   validateOnInput({value, name, error})
+// }
 
 const handleSubmit = async () => {
   const isValid = validateInput([
@@ -98,7 +98,7 @@ const handleSubmit = async () => {
               id="name"
               placeholder="Enter your name"
               v-model.trim="name"
-              @input="validateOnBlur"
+              @input="validateOnInput({value: $event.target.value, name: $event.target.name, error})"
               :class="{errorInput: error.name.isError}"
           >
           <p class="error" v-if="error.name.isError">{{error.name.message}}</p>
@@ -111,7 +111,7 @@ const handleSubmit = async () => {
               id="email"
               placeholder="Enter your email"
               v-model.trim="email"
-              @input="validateOnBlur"
+              @input="validateOnInput({value: $event.target.value, name: $event.target.name, error})"
               :class="{errorInput: error.email.isError}"
           >
           <p class="error" v-if="error.email.isError">{{error.email.message}}</p>
@@ -124,7 +124,7 @@ const handleSubmit = async () => {
               id="password"
               placeholder="********"
               v-model.trim="password"
-              @input="validateOnBlur"
+              @input="validateOnInput({value: $event.target.value, name: $event.target.name, error})"
               :class="{errorInput: error.password.isError}"
           >
           <p class="error" v-if="error.password.isError">{{error.password.message}}</p>
