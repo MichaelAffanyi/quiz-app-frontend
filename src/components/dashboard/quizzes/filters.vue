@@ -1,5 +1,8 @@
 <script setup>
 
+import {computed, inject} from "vue";
+import checkIcon from "@/assets/check.svg"
+
 const filters = [
     {
       name: 'Subject',
@@ -10,6 +13,10 @@ const filters = [
       filterBy: ['Beginner', 'Intermediate', 'Advanced']
     },]
 
+const selectedFilters = inject('selectedFilters')
+
+const isSelected = computed(() => ({name, filter}) => selectedFilters.value[name.toLowerCase()].includes(filter.toLowerCase()))
+
 </script>
 
 <template>
@@ -18,8 +25,15 @@ const filters = [
     <div v-for="filter in filters" class="py-7 border-b border-[#999999] last:border-0">
       <h4 class="mb-7">{{filter.name}}</h4>
       <ul>
-        <li v-for="name in filter.filterBy" class="flex items-center gap-3">
-          <div class="w-4 h-4 border-2 border-[#000000] rounded-sm"></div>
+        <li v-for="name in filter.filterBy"
+            class="flex items-center gap-3 cursor-pointer" @click="$emit('addToSelected', [filter.name,name])"
+        >
+          <div
+              class="w-4 h-4 border border-[#000000] rounded-sm flex items-center justify-center"
+              :class="{selected: isSelected({name: filter.name, filter: name})}"
+          >
+            <img v-if="isSelected({name: filter.name, filter: name})" :src="checkIcon" alt="">
+          </div>
           <span class="w-max">{{name}}</span>
         </li>
       </ul>
@@ -28,5 +42,8 @@ const filters = [
 </template>
 
 <style scoped>
-
+.selected {
+  background: #0267FF;
+  border: 1px solid #0267FF;
+}
 </style>

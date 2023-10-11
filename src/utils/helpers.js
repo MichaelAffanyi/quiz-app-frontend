@@ -1,5 +1,5 @@
 import {useStore} from "vuex";
-import {authApi} from "@/utils/index";
+import {authApi, quizApi} from "@/utils/index";
 import {validateOnInput} from "@/utils/validateInput";
 import {useRoute} from "vue-router";
 
@@ -51,4 +51,13 @@ export const handleInput = (event, error) => {
     const value = event.target.value
     const name = event.target.name
     validateOnInput({value, name, error})
+}
+
+export const getQuizzes = async (url) => {
+    try {
+        const response = await quizApi(url)
+        return response?.data
+    } catch (e) {
+        console.log(e)
+    }
 }

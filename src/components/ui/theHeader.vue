@@ -25,7 +25,6 @@ const toggleOpen = (event) => {
 const isOpen = ref(false)
 
 const user = store.getters.getUser
-console.log(user)
 const hasUser = Object.keys(user).length > 0
 
 // const hasUser = Object.keys(user).length > 0

@@ -9,6 +9,10 @@ defineProps({
     type: Boolean,
     required: false,
     default: false,
+  },
+  quiz: {
+    type: Object,
+    required: true
   }
 })
 </script>
@@ -16,12 +20,12 @@ defineProps({
 <template>
   <div class="relative w-full h-[259px] overflow-hidden text-white rounded-xl">
     <div class="absolute inset-0 w-full h-full">
-      <img :src="quizBg" alt="" class="w-full h-full object-fill">
+      <img :src="quiz.coverImage" alt="" class="w-full h-full object-fill">
     </div>
     <div class="absolute w-max h-max left-0 right-0 bottom-3 mx-auto card flex flex-col border border-white border-opacity-30 rounded-lg px-6 py-3 backdrop-blur">
-      <span v-if="!isRecentQuiz" class="font-bold">Master Html</span>
+      <span v-if="!isRecentQuiz" class="font-bold">{{quiz.title}}</span>
       <div v-if="!isRecentQuiz" class="flex gap-2">
-        <span>By Sarah Dawson</span>
+        <span>{{quiz.author}}</span>
         <span class="flex gap-1 items-center bg-[#0267FF] rounded-full px-1 text-[11px]">
           <img :src="starIcon" alt="star">
           4.2K
@@ -30,7 +34,7 @@ defineProps({
       <div class="flex gap-4" :class="{recent: isRecentQuiz}">
         <span class="flex gap-2">
           <img :src="timeIcon" alt="time">
-          1 hour/60mins
+          {{quiz.duration}} hour/60mins
         </span>
         <div class="flex gap-2">
           <img :src="eyeIcon" alt="eye">

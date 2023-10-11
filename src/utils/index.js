@@ -7,3 +7,6 @@ export const authApi = axios.create({
 export const settingsApi = axios.create({
     baseURL: `${baseURL}/settings`,
 })
+export const quizApi = axios.create({
+    baseURL: `${baseURL}/quizzes`,
+})
