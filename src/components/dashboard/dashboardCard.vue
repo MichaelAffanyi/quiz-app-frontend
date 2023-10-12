@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="max-w-[402px] w-full flex items-center justify-between px-7 py-12 rounded-md" :class="card.name">
+  <div class="max-w-[402px] w-full flex items-center justify-between px-7 py-12 rounded-md cursor-pointer" :class="card.name">
     <div class="w-20 h-20 rounded-full bg-white flex justify-center items-center">
       <img :src="card.image" alt="">
     </div>

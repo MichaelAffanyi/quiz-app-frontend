@@ -1,7 +1,6 @@
 import {useStore} from "vuex";
 import {authApi, quizApi} from "@/utils/index";
 import {validateOnInput} from "@/utils/validateInput";
-import {useRoute} from "vue-router";
 
 export const beforeRegisterEnter = (to, from, next) => {
     const store = useStore()
@@ -38,12 +37,31 @@ export const beforeDashboardEnter = async (to, from, next) => {
 }
 
 export const beforeLoginEnter = (to, from, next) => {
-    const hasAccess = document.cookie.split(';').some(ele => ele.split("=")[0] === 'accessToken')
+    const hasAccess = document.cookie.split(';').some(ele => ele.split("=")[0].trim() === 'accessToken')
     if(hasAccess) {
        next('/dashboard/profile')
     } else {
         next()
     }
+}
+
+export const beforeQuestionsEnter = async (to, from, next) => {
+    const store = useStore()
+    const {title, questionId} = to.params
+    const id = questionId.split('_')[1]
+    const quizId = title.split('_')[0]
+
+    try {
+        const response = await quizApi(`/${quizId}/${id}`)
+        response.data.number = Number(id)
+        console.log(response)
+        store.commit('setQuestionData', response?.data)
+    } catch (e) {
+        console.log(e)
+        next('/dashboard/profile/quizzes')
+    }
+
+    next()
 }
 
 export const handleInput = (event, error) => {
@@ -60,4 +78,19 @@ export const getQuizzes = async (url) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+export const getTimer = (duration) => {
+    const minutes = Math.floor((duration % 3600) / 60)
+    const hours = Math.floor(duration / 3600)
+    const remainingSeconds = duration % 60
+
+    // console.log('hours:::', hours)
+    // console.log('Minute:::', minutes)
+    // console.log('remainingSeconds:::', remainingSeconds)
+    return [
+        hours.toString().padStart(2, '0'),
+        minutes.toString().padStart(2, '0'),
+        remainingSeconds.toString().padStart(2, '0'),
+    ].join(":")
 }

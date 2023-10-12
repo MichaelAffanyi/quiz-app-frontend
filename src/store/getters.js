@@ -18,3 +18,7 @@ export const getStep = (state) => {
 export const isDeleteModalOpen = (state) => {
     return state.openDeleteModal
 }
+
+export const getQuestion = (state) => {
+    return state.questionData
+}

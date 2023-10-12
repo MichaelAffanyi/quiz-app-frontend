@@ -22,3 +22,7 @@ export const toggleDeleteModal = (state) => {
 export const updateImage = (state, payload) => {
     state.user.profilePhoto = payload
 }
+
+export const setQuestionData = (state, payload) => {
+    state.questionData = payload
+}

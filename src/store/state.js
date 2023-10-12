@@ -5,5 +5,6 @@ export default {
     activeComponent: '',
     user: {},
     isRegistered: false,
-    openDeleteModal: false
+    openDeleteModal: false,
+    questionData: null
 }

@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {beforeRegisterEnter, beforeDashboardEnter, beforeLoginEnter} from "@/utils/helpers"
+import {beforeRegisterEnter, beforeDashboardEnter, beforeLoginEnter, beforeQuestionsEnter} from "@/utils/helpers"
 
 
 const router = createRouter({
@@ -67,6 +67,21 @@ const router = createRouter({
                 {
                     path: 'profile/account-settings',
                     component: () => import("@/views/accountSettings.vue")
+                }
+            ]
+        },
+        {
+            path: '/quizzes/:title',
+            component: () => import("@/views/singleQuiz.vue"),
+            children: [
+                {
+                    path: '',
+                    component: () => import("@/components/quizzes/quizOnBoarding.vue")
+                },
+                {
+                    path: ':questionId',
+                    component: () => import("@/components/quizzes/questionComponent.vue"),
+                    beforeEnter: beforeQuestionsEnter
                 }
             ]
         }
