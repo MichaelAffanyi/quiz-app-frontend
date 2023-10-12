@@ -1,21 +1,26 @@
 <script setup>
 import {useRoute, useRouter} from "vue-router";
-import {computed, ref, watch} from "vue";
+import {computed, onDeactivated, onMounted, onUnmounted, ref, watch} from "vue";
 import TimerIcon from "@/assets/quizzes/timerIcon.vue";
 
 const route = useRoute()
 const params = route.params.title.split('_')
 const title = computed(() => params.at(-1).split("-").join(" "))
-const seconds = computed(() => new Date().getSeconds())
 const path = computed(() => route.path)
 const isQuestions = ref(false)
 const duration = params[1]
-const timer = ref(`${duration.padStart(2, '0')}:00:00`)
+const timer = ref(localStorage.getItem('timer') || `${duration.padStart(2, '0')}:00:00`)
 
-// console.log(new Date().getSeconds())
+
+onMounted(() => {
+  if(path.value.split('/').at(-1).includes('question')) {
+    isQuestions.value = true
+    return
+  }
+  isQuestions.value = false
+})
 
 watch(path, (newValue) => {
-  console.log(newValue)
   if(newValue.split('/').at(-1).includes('question')) {
     isQuestions.value = true
     return
@@ -26,7 +31,6 @@ watch(path, (newValue) => {
 const getTimer = (time) => {
   timer.value = time
 }
-
 </script>
 
 <template>

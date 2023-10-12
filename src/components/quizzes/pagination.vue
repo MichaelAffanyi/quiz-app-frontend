@@ -2,24 +2,38 @@
 import backIcon from "@/assets/quizzes/previousIcon.vue"
 import forwardIcon from "@/assets/quizzes/forwardIcon.vue"
 import {useStore} from "vuex";
-import {computed, ref} from "vue";
-import {useRoute} from "vue-router";
+import {computed, ref, watch} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {quizApi} from "@/utils";
 
   const store = useStore()
   const route = useRoute()
-  const {total, hasMore, number} = store.getters.getQuestion
-  const currentPage = ref(number)
-
-  console.log(route.path.split('/').at(-1).at(-1))
+  const router = useRouter()
+  const questionData = computed(() => store.getters.getQuestion)
+  const currentPage = ref(1)
 
   const pageNumbers = []
-  for (let i = 1; i <= total; i++) {
+  for (let i = 1; i <= questionData.value.total; i++) {
     pageNumbers.push(i)
   }
-  const isActive = computed(() => (page) => page === currentPage.value)
+  const isActive = computed(() => (page) => page === questionData.value.number)
 
-const setCurrentPage = (page) => {
-    currentPage.value = page
+const setCurrentPage = async (page) => {
+  try {
+    const routeArr = route.path.split('/')
+    routeArr.pop()
+    routeArr.push(`question_${page}`)
+
+    const {title, questionId} = route.params
+    const quizId = title.split('_')[0]
+    const response = await quizApi(`/${quizId}/${page}`)
+
+    response.data.number = Number(page)
+    store.commit('setQuestionData', response?.data)
+    await router.push(routeArr.join("/"))
+  } catch (e) {
+    console.log(e)
+  }
 }
 </script>
 

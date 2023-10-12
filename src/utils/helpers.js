@@ -54,7 +54,6 @@ export const beforeQuestionsEnter = async (to, from, next) => {
     try {
         const response = await quizApi(`/${quizId}/${id}`)
         response.data.number = Number(id)
-        console.log(response)
         store.commit('setQuestionData', response?.data)
     } catch (e) {
         console.log(e)
