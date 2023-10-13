@@ -1,10 +1,12 @@
 <script setup>
 import {useStore} from "vuex";
-import {computed} from "vue";
+import {computed, inject} from "vue";
 
+const selectedAnswer = inject('selectedAnswer')
 const store = useStore()
 
 const questionData = computed(() => store.getters.getQuestion)
+const isActive = computed(() => (value) => selectedAnswer.value === value)
 </script>
 
 <template>
@@ -12,18 +14,27 @@ const questionData = computed(() => store.getters.getQuestion)
     <div class="max-w-[811px]">
       <h4 class="text-2xl">{{questionData.question.question}}</h4>
       <div class="text-lg grid grid-cols-2 gap-x-[118px] gap-y-[37px] mt-[66px]">
-        <label v-for="option in questionData.question.options" :for="option.tag" class="border border-[#737373] rounded-lg p-2 flex items-center w-[345px] justify-between cursor-pointer">
+        <label v-for="option in questionData.question.options"
+               :for="option.tag"
+               class="border-2 border-[#737373] rounded-lg p-2 flex items-center w-[345px] justify-between cursor-pointer"
+               :class="{active: isActive(option.value)}"
+        >
           <span>{{option.tag}}.  {{option.value}}</span>
-          <input type="radio" name="option" :id="option.tag" class="">
+          <input v-model="selectedAnswer" type="radio" name="option" :id="option.tag" class="" :value="option.value">
         </label>
       </div>
     </div>
     <span class="text-lg text-[#737373] bg-[#F2F2F2] p-2 rounded-md h-max">{{questionData.question.points
       }} points</span>
   </div>
-  <button class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg">Next</button>
+  <button :disabled="!!!selectedAnswer" class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed transition duration-500 ease-in">Next</button>
 </template>
 
 <style scoped>
-
+.active {
+  background: #D3DCE9;
+  color: #0267FF;
+  border: 2px solid #0267FF;
+  font-weight: 600;
+}
 </style>

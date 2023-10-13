@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {computed, provide, onMounted, ref, watch} from "vue";
 import {getTimer} from "@/utils/helpers";
 import Pagination from "@/components/quizzes/pagination.vue";
 import {useRoute} from "vue-router";
@@ -12,6 +12,9 @@ const props = defineProps(['duration'])
 const secondsLeft = ref(Number(props.duration) * 60 * 60)
 const emit = defineEmits(['remainingTime'])
 const path = computed(() => route.params)
+const selectedAnswer = ref('')
+
+provide('selectedAnswer', selectedAnswer)
 
 onMounted(() => {
   setInterval(() => {
@@ -23,6 +26,9 @@ watch(secondsLeft, (newValue) => {
   emit('remainingTime', getTimer(newValue))
 })
 
+watch(selectedAnswer, (newVal) => {
+  console.log(newVal)
+})
 </script>
 
 <template>

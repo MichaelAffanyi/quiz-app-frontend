@@ -2,7 +2,7 @@
 import backIcon from "@/assets/quizzes/previousIcon.vue"
 import forwardIcon from "@/assets/quizzes/forwardIcon.vue"
 import {useStore} from "vuex";
-import {computed, ref, watch} from "vue";
+import {computed, inject, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {quizApi} from "@/utils";
 import {formatOptions} from "@/utils/helpers";
@@ -11,7 +11,9 @@ import {formatOptions} from "@/utils/helpers";
   const route = useRoute()
   const router = useRouter()
   const questionData = computed(() => store.getters.getQuestion)
-  const currentPage = ref(1)
+  const currentPage = ref(questionData.value.number)
+
+  const selectedAnswer = inject('selectedAnswer')
 
   const pageNumbers = []
   for (let i = 1; i <= questionData.value.total; i++) {
@@ -32,21 +34,38 @@ const setCurrentPage = async (page) => {
     response.data.number = Number(page)
     response.data.question.options = formatOptions(response.data.question.options)
     store.commit('setQuestionData', response?.data)
+    selectedAnswer.value = ''
     await router.push(routeArr.join("/"))
   } catch (e) {
     console.log(e)
   }
 }
-  watch(questionData, (newValue) => {
-    console.log(newValue)
+
+  const goToNext = () => {
+    if(currentPage.value < questionData.value.total) {
+      currentPage.value++
+    }
+  }
+
+  const goToPrevious = () => {
+    if (currentPage.value > 1) {
+      currentPage.value--
+    }
+  }
+
+  watch(currentPage, (newCurrentPage) => {
+    setCurrentPage(newCurrentPage)
+  })
+watch(questionData, (newValue) => {
+  currentPage.value = newValue.number
   })
 </script>
 
 <template>
   <div class="flex mt-7">
-    <span class="button rounded-l-lg"><back-icon></back-icon></span>
+    <span @click="goToPrevious" class="button rounded-l-lg"><back-icon></back-icon></span>
     <span class="button" v-for="page in pageNumbers" :class="{active: isActive(page)}" @click="setCurrentPage(page)">{{ page }}</span>
-    <span class="button rounded-r-lg"><forward-icon></forward-icon></span>
+    <span @click="goToNext" class="button rounded-r-lg"><forward-icon></forward-icon></span>
   </div>
 </template>
 
