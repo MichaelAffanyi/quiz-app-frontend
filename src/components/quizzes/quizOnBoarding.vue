@@ -32,9 +32,13 @@
   ]
 
   const route = useRoute()
+  const router = useRouter()
   const path = computed(() => `${route.path}/question_1`)
 
-
+  const moveToQuestion = () => {
+    // router.replace(path.value)
+    window.open(`${window.location.href}/question_1`, '_blank')
+  }
 
 </script>
 <template>
@@ -57,7 +61,7 @@
         </div>
       </div>
     </div>
-    <router-link :to="path" class="w-[181px] h-10 bg-[#0267FF] flex items-center justify-center rounded-lg text-white text-lg mt-16 mb-40">Start</router-link>
+    <button @click="moveToQuestion" class="w-[181px] h-10 bg-[#0267FF] flex items-center justify-center rounded-lg text-white text-lg mt-16 mb-40">Start</button>
   </div>
 </template>
 

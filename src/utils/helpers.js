@@ -54,6 +54,7 @@ export const beforeQuestionsEnter = async (to, from, next) => {
     try {
         const response = await quizApi(`/${quizId}/${id}`)
         response.data.number = Number(id)
+        response.data.question.options = formatOptions(response.data.question.options)
         store.commit('setQuestionData', response?.data)
     } catch (e) {
         console.log(e)
@@ -92,4 +93,14 @@ export const getTimer = (duration) => {
         minutes.toString().padStart(2, '0'),
         remainingSeconds.toString().padStart(2, '0'),
     ].join(":")
+}
+
+export const formatOptions = (options) => {
+    const tagArr = ['A', 'B', 'C', 'D']
+    return options.map((ele, index) => {
+        return {
+            tag: tagArr[index],
+            value: ele
+        }
+    })
 }

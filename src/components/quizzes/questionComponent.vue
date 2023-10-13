@@ -4,6 +4,7 @@ import {getTimer} from "@/utils/helpers";
 import Pagination from "@/components/quizzes/pagination.vue";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
+import SingleQuestion from "@/components/quizzes/singleQuestion.vue";
 
 const route = useRoute()
 const store = useStore()
@@ -25,7 +26,10 @@ watch(secondsLeft, (newValue) => {
 </script>
 
 <template>
-  <pagination></pagination>
+  <div class="w-full flex flex-col items-center gap-[192px]">
+    <pagination></pagination>
+    <single-question></single-question>
+  </div>
 </template>
 
 <style scoped>

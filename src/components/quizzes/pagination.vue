@@ -5,6 +5,7 @@ import {useStore} from "vuex";
 import {computed, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {quizApi} from "@/utils";
+import {formatOptions} from "@/utils/helpers";
 
   const store = useStore()
   const route = useRoute()
@@ -29,16 +30,20 @@ const setCurrentPage = async (page) => {
     const response = await quizApi(`/${quizId}/${page}`)
 
     response.data.number = Number(page)
+    response.data.question.options = formatOptions(response.data.question.options)
     store.commit('setQuestionData', response?.data)
     await router.push(routeArr.join("/"))
   } catch (e) {
     console.log(e)
   }
 }
+  watch(questionData, (newValue) => {
+    console.log(newValue)
+  })
 </script>
 
 <template>
-  <div class="w-full flex items-center justify-center mt-7">
+  <div class="flex mt-7">
     <span class="button rounded-l-lg"><back-icon></back-icon></span>
     <span class="button" v-for="page in pageNumbers" :class="{active: isActive(page)}" @click="setCurrentPage(page)">{{ page }}</span>
     <span class="button rounded-r-lg"><forward-icon></forward-icon></span>
