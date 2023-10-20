@@ -39,12 +39,6 @@ const getTimer = (time) => {
 const goBack = () => {
   router.go(-1)
 }
-
-// window.addEventListener('popstate', (e) => {
-//   console.log(e)
-//   console.log(history)
-//   history.pushState(null, null, window.location.href)
-// })
 </script>
 
 <template>
