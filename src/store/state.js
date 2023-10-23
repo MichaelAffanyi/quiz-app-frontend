@@ -6,5 +6,6 @@ export default {
     user: {},
     isRegistered: false,
     openDeleteModal: false,
-    questionData: null
+    questionData: null,
+    answers: []
 }

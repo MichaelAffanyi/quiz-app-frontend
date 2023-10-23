@@ -1,12 +1,39 @@
 <script setup>
 import {useStore} from "vuex";
-import {computed, inject} from "vue";
+import {computed, inject, ref, watch} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {setCurrentPage} from "@/utils/helpers";
 
 const selectedAnswer = inject('selectedAnswer')
 const store = useStore()
+const route = useRoute()
+const router = useRouter()
 
 const questionData = computed(() => store.getters.getQuestion)
+const routerPath = computed(() => route.path)
+const params = computed(() => route.params)
+const answers = store.getters.getAnswers
 const isActive = computed(() => (value) => selectedAnswer.value === value)
+
+console.log(questionData)
+const saveAnswer = async () => {
+  if (questionData.value.number >= questionData.value.total) return
+  const newAnswerObj = {
+    id: questionData.value.question._id,
+    value: selectedAnswer.value
+  }
+  await store.dispatch('addAnswer', newAnswerObj)
+
+  const {url, data} = await setCurrentPage({page: questionData.value.number + 1, path: routerPath.value, params: params.value})
+  store.commit('setQuestionData', data)
+  selectedAnswer.value = ""
+  await router.push(url)
+}
+
+// watch(answers, (newValue) => {
+//   console.log(newValue)
+// })
+
 </script>
 
 <template>
@@ -27,7 +54,11 @@ const isActive = computed(() => (value) => selectedAnswer.value === value)
     <span class="text-lg text-[#737373] bg-[#F2F2F2] p-2 rounded-md h-max">{{questionData.question.points
       }} points</span>
   </div>
-  <button :disabled="!!!selectedAnswer" class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed transition duration-500 ease-in">Next</button>
+  <button
+      :disabled="!!!selectedAnswer"
+      class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed transition duration-500 ease-in"
+      @click="saveAnswer"
+  >Next</button>
 </template>
 
 <style scoped>

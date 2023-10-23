@@ -26,3 +26,11 @@ export const updateImage = (state, payload) => {
 export const setQuestionData = (state, payload) => {
     state.questionData = payload
 }
+
+export const addToAnswers = (state, payload) => {
+    state.answers.push(payload)
+}
+
+export const replaceAnswer = (state, payload) => {
+    state.answers[payload.index] = payload.value
+}

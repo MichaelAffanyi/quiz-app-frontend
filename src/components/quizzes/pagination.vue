@@ -5,12 +5,14 @@ import {useStore} from "vuex";
 import {computed, inject, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {quizApi} from "@/utils";
-import {formatOptions} from "@/utils/helpers";
+import {formatOptions, setCurrentPage} from "@/utils/helpers";
 
   const store = useStore()
   const route = useRoute()
   const router = useRouter()
   const questionData = computed(() => store.getters.getQuestion)
+  const routerPath = computed(() => route.path)
+  const params = computed(() => route.params)
   const currentPage = ref(questionData.value.number)
 
   const selectedAnswer = inject('selectedAnswer')
@@ -21,24 +23,31 @@ import {formatOptions} from "@/utils/helpers";
   }
   const isActive = computed(() => (page) => page === questionData.value.number)
 
-const setCurrentPage = async (page) => {
-  try {
-    const routeArr = route.path.split('/')
-    routeArr.pop()
-    routeArr.push(`question_${page}`)
+// const setCurrentPage = async (page) => {
+//   try {
+//     const routeArr = route.path.split('/')
+//     routeArr.pop()
+//     routeArr.push(`question_${page}`)
+//
+//     const {title, questionId} = route.params
+//     const quizId = title.split('_')[0]
+//     const response = await quizApi(`/${quizId}/${page}`)
+//
+//     response.data.number = Number(page)
+//     response.data.question.options = formatOptions(response.data.question.options)
+//     store.commit('setQuestionData', response?.data)
+//     selectedAnswer.value = ''
+//     await router.push(routeArr.join("/"))
+//   } catch (e) {
+//     console.log(e)
+//   }
+// }
 
-    const {title, questionId} = route.params
-    const quizId = title.split('_')[0]
-    const response = await quizApi(`/${quizId}/${page}`)
-
-    response.data.number = Number(page)
-    response.data.question.options = formatOptions(response.data.question.options)
-    store.commit('setQuestionData', response?.data)
-    selectedAnswer.value = ''
-    await router.push(routeArr.join("/"))
-  } catch (e) {
-    console.log(e)
-  }
+const handleClick = async (page) => {
+  const {url, data} = await setCurrentPage({page, path: routerPath.value, params: params.value})
+  store.commit('setQuestionData', data)
+  selectedAnswer.value = ""
+  await router.push(url)
 }
 
   const goToNext = () => {
@@ -53,8 +62,8 @@ const setCurrentPage = async (page) => {
     }
   }
 
-  watch(currentPage, (newCurrentPage) => {
-    setCurrentPage(newCurrentPage)
+  watch(currentPage, async (newCurrentPage) => {
+    await handleClick(newCurrentPage)
   })
 watch(questionData, (newValue) => {
   currentPage.value = newValue.number
@@ -64,7 +73,7 @@ watch(questionData, (newValue) => {
 <template>
   <div class="flex mt-7">
     <span @click="goToPrevious" class="button rounded-l-lg"><back-icon></back-icon></span>
-    <span class="button" v-for="page in pageNumbers" :class="{active: isActive(page)}" @click="setCurrentPage(page)">{{ page }}</span>
+    <span class="button" v-for="page in pageNumbers" :class="{active: isActive(page)}" @click="handleClick(page)">{{ page }}</span>
     <span @click="goToNext" class="button rounded-r-lg"><forward-icon></forward-icon></span>
   </div>
 </template>

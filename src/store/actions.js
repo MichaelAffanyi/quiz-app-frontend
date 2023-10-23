@@ -32,6 +32,12 @@ export const setActiveStep = ({commit}, payload) => {
     commit('setStep', active)
 }
 
-export const registerUser = () => {
-
+export const addAnswer = ({commit, rootState}, payload) => {
+    const index = rootState.answers.findIndex(answer => answer.id === payload.id)
+    if (index === -1) {
+        commit('addToAnswers', payload)
+    } else {
+        commit('replaceAnswer', {index, value: payload})
+    }
+    // console.log(payload)
 }

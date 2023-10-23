@@ -1,6 +1,7 @@
 import {useStore} from "vuex";
 import {authApi, quizApi} from "@/utils/index";
 import {validateOnInput} from "@/utils/validateInput";
+import {useRoute} from "vue-router";
 
 export const beforeRegisterEnter = (to, from, next) => {
     const store = useStore()
@@ -103,4 +104,25 @@ export const formatOptions = (options) => {
             value: ele
         }
     })
+}
+
+export const setCurrentPage = async ({path, params, page}) => {
+    try {
+        const routeArr = path.split('/')
+        routeArr.pop()
+        routeArr.push(`question_${page}`)
+
+        const {title, questionId} = params
+        const quizId = title.split('_')[0]
+        const response = await quizApi(`/${quizId}/${page}`)
+
+        response.data.number = Number(page)
+        response.data.question.options = formatOptions(response.data.question.options)
+        return {
+            url: routeArr.join("/"),
+            data: response?.data
+        }
+    } catch (e) {
+        console.log(e)
+    }
 }

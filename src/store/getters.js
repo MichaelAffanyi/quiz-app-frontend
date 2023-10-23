@@ -22,3 +22,7 @@ export const isDeleteModalOpen = (state) => {
 export const getQuestion = (state) => {
     return state.questionData
 }
+
+export const getAnswers = (state) => {
+    return state.answers
+}
