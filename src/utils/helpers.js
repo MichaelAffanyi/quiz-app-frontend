@@ -1,7 +1,9 @@
 import {useStore} from "vuex";
-import {authApi, quizApi} from "@/utils/index";
+import {authApi, quizApi, settingsApi} from "@/utils/index";
 import {validateOnInput} from "@/utils/validateInput";
+import gql from "graphql-tag"
 import {useRoute} from "vue-router";
+import {useQuery} from "@vue/apollo-composable";
 
 export const beforeRegisterEnter = (to, from, next) => {
     const store = useStore()
@@ -127,4 +129,40 @@ export const setCurrentPage = async ({path, params, page}) => {
     } catch (e) {
         console.log(e)
     }
+}
+
+export const deleteAccount = async ({isLoading, isSuccess, isError}) => {
+    try {
+        isLoading.value = true
+        const res = await settingsApi.delete('/delete-account')
+        if(res?.status === 200) {
+            isSuccess.value = 'Account deleted successfully'
+            isLoading.value = false
+            setTimeout(() => {
+                location.reload()
+            }, 1500)
+        }
+    } catch (e) {
+        isLoading.value = false
+        isError.value = e?.response?.data?.error || 'Can\'t delete account now'
+    }
+}
+
+export const submitAnswer = async ({id, answers}) => {
+    const query = gql`
+        query($quizId: String!,$answers: [answer!]) {
+            submitAnswers(quizId: $quizId, answers: $answers) {
+                id
+                answer
+                status
+                explanation
+            }
+        }
+    `
+    const variables = {
+        quizId: id,
+        answers
+    }
+    const {result} = await useQuery(query, variables)
+    return result.value
 }

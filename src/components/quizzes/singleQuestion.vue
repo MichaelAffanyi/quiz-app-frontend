@@ -2,8 +2,6 @@
 import {useStore} from "vuex";
 import {computed, inject, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import gql from "graphql-tag";
-import {useQuery} from "@vue/apollo-composable"
 
 const selectedAnswer = inject('selectedAnswer')
 const store = useStore()
@@ -12,30 +10,12 @@ const router = useRouter()
 
 const answers = computed(() => store.getters.getAnswers)
 const questionData = computed(() => store.getters.getQuestion)
-const params = computed(() => route.params)
 const isActive = computed(() => (value) => selectedAnswer.value === value)
 const isChecked = ref(false)
 const isLast = computed(() => (questionData.value.number === questionData.value.total) && (answers.value.length === questionData.value.total))
 const currentPage = ref(questionData.value.number)
 
-const query = gql`
-  query($quizId: String!,$answers: [answer!]) {
-    submitAnswers(quizId: $quizId, answers: $answers) {
-        id
-        answer
-        status
-        explanation
-    }
-  }
-`
-
-const variables = {
-  quizId: params.value.title.split("_")[0],
-  answers: answers.value
-}
-
 const handleSelect = (event) => {
-  // console.log(event.target.value)
   const newAnswerObj = {
     id: questionData.value.question._id,
     value: event.target.value
@@ -43,10 +23,8 @@ const handleSelect = (event) => {
   store.dispatch('addAnswer', newAnswerObj)
 }
 const saveAnswer = async () => {
-  // console.log(isLast)
   if (isLast.value) {
-    const {result} = useQuery(query, variables)
-    console.log(result)
+    store.commit('toggleSubmitAnswerModal')
     return
   }
   currentPage.value++
@@ -63,7 +41,7 @@ watch(currentPage, (nextPage) => {
 </script>
 
 <template>
-  <div class="flex gap-[154px]">
+  <div class="flex gap-[154px] bg-red-200">
     <div class="max-w-[811px]">
       <h4 class="text-2xl">{{questionData.question.question}}</h4>
       <div class="text-lg grid grid-cols-2 gap-x-[118px] gap-y-[37px] mt-[66px]">
@@ -88,7 +66,7 @@ watch(currentPage, (nextPage) => {
       }} points</span>
   </div>
   <button
-      :disabled="!isChecked"
+      :disabled="isLast ? !isChecked : !!!selectedAnswer"
       class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed transition duration-500 ease-in"
       @click="saveAnswer"
   >{{isLast ? 'Submit' : 'Next'}}</button>

@@ -19,6 +19,10 @@ export const toggleDeleteModal = (state) => {
     state.openDeleteModal = !state.openDeleteModal
 }
 
+export const toggleSubmitAnswerModal = (state) => {
+    state.openSubmitAnswer = !state.openSubmitAnswer
+}
+
 export const updateImage = (state, payload) => {
     state.user.profilePhoto = payload
 }

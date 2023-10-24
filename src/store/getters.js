@@ -19,6 +19,10 @@ export const isDeleteModalOpen = (state) => {
     return state.openDeleteModal
 }
 
+export const isSubmitAnswerModalOpen = (state) => {
+    return state.openSubmitAnswer
+}
+
 export const getQuestion = (state) => {
     return state.questionData
 }
