@@ -2,7 +2,6 @@
 import {useStore} from "vuex";
 import {computed, inject, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import {setCurrentPage} from "@/utils/helpers";
 import gql from "graphql-tag";
 import {useQuery} from "@vue/apollo-composable"
 
@@ -13,14 +12,15 @@ const router = useRouter()
 
 const answers = computed(() => store.getters.getAnswers)
 const questionData = computed(() => store.getters.getQuestion)
-const routerPath = computed(() => route.path)
 const params = computed(() => route.params)
 const isActive = computed(() => (value) => selectedAnswer.value === value)
+const isChecked = ref(false)
 const isLast = computed(() => (questionData.value.number === questionData.value.total) && (answers.value.length === questionData.value.total))
+const currentPage = ref(questionData.value.number)
 
 const query = gql`
-  query($quizId: String!,$answers: [answer]!) {
-    submitAnswer(quizId: $quizId, answers: $answers) {
+  query($quizId: String!,$answers: [answer!]) {
+    submitAnswers(quizId: $quizId, answers: $answers) {
         id
         answer
         status
@@ -34,34 +34,31 @@ const variables = {
   answers: answers.value
 }
 
-// console.log(answers.value.length === questionData.value.total - 1)
-// console.log(answers)
-// console.log(isLast)
-
-const handleSelect = async (event) => {
+const handleSelect = (event) => {
   // console.log(event.target.value)
   const newAnswerObj = {
     id: questionData.value.question._id,
     value: event.target.value
   }
-  await store.dispatch('addAnswer', newAnswerObj)
+  store.dispatch('addAnswer', newAnswerObj)
 }
 const saveAnswer = async () => {
-  if (isLast) {
+  // console.log(isLast)
+  if (isLast.value) {
     const {result} = useQuery(query, variables)
     console.log(result)
     return
   }
-
-  const {url, data} = await setCurrentPage({page: questionData.value.number + 1, path: routerPath.value, params: params.value})
-  store.commit('setQuestionData', data)
-  selectedAnswer.value = ""
-  await router.push(url)
+  currentPage.value++
 }
 
-// watch(answers, (newValue) => {
-//   console.log(newValue)
-// })
+const handleClick = (event) => {
+  isChecked.value = event.target.checked
+}
+
+watch(currentPage, (nextPage) => {
+  router.push(`question_${nextPage}`)
+})
 
 </script>
 
@@ -82,7 +79,7 @@ const saveAnswer = async () => {
       <div v-if="isLast" class="mt-20">
         <h3 class="font-semibold">QuizMaster honor code <span class="text-[#0267FF] font-normal cursor-pointer">Learn more</span></h3>
         <div class="flex gap-2 items-start mt-2">
-            <input class="w-[24px] h-[24px] cursor-pointer" type="checkbox" name="agreement" id="">
+            <input @click="handleClick" class="w-[24px] h-[24px] cursor-pointer" type="checkbox" name="agreement" id="" :checked="isChecked">
           <h4 class="max-w-[795px]"><span class="font-semibold">I John Doe</span>, understand that submitting work that isn’t my own may result in permanent failure of this quiz or deactivations of my quiz master account.</h4>
         </div>
       </div>
@@ -91,7 +88,7 @@ const saveAnswer = async () => {
       }} points</span>
   </div>
   <button
-      :disabled="!!!selectedAnswer"
+      :disabled="!isChecked"
       class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed transition duration-500 ease-in"
       @click="saveAnswer"
   >{{isLast ? 'Submit' : 'Next'}}</button>

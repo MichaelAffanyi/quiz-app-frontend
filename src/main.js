@@ -11,7 +11,7 @@ import VueApexCharts from "vue3-apexcharts";
 import VCalendar from 'v-calendar';
 import 'v-calendar/style.css';
 import { ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client/core";
-import {createApolloProvider} from "@vue/apollo-option";
+import {provideApolloClient} from "@vue/apollo-composable";
 
 const httpLink = createHttpLink({
     uri: 'http://localhost:8080/graphql'
@@ -24,12 +24,12 @@ const apolloClient = new ApolloClient({
     connectToDevTools: true,
 })
 
-const apolloProvider = createApolloProvider({
-    defaultClient: apolloClient
-})
+// const apolloProvider = createApolloProvider({
+//     defaultClient: apolloClient
+// })
 
 const app = createApp(App)
-app.use(apolloProvider)
+provideApolloClient(apolloClient)
 app.use(router)
 app.use(store)
 app.use(VueApexCharts)

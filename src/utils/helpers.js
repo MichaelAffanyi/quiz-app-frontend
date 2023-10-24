@@ -46,7 +46,7 @@ export const beforeLoginEnter = (to, from, next) => {
     }
 }
 
-export const beforeQuestionsEnter = async (to, from, next) => {
+export const beforeQuestionsEnter = async (to, from, next, update = false) => {
     const store = useStore()
     const {title, questionId} = to.params
     const id = questionId.split('_')[1]
@@ -56,6 +56,9 @@ export const beforeQuestionsEnter = async (to, from, next) => {
         response.data.number = Number(id)
         response.data.question.options = formatOptions(response.data.question.options)
         store.commit('setQuestionData', response?.data)
+        // if (update) {
+        //
+        // }
     } catch (e) {
         console.log(e)
         next('/dashboard/profile/quizzes')
