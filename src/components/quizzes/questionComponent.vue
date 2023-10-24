@@ -26,9 +26,6 @@ watch(secondsLeft, (newValue) => {
   emit('remainingTime', getTimer(newValue))
 })
 
-// watch(selectedAnswer, (newVal) => {
-//   console.log(newVal)
-// })
 </script>
 
 <template>

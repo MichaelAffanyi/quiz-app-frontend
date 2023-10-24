@@ -3,26 +3,55 @@ import {useStore} from "vuex";
 import {computed, inject, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {setCurrentPage} from "@/utils/helpers";
+import gql from "graphql-tag";
+import {useQuery} from "@vue/apollo-composable"
 
 const selectedAnswer = inject('selectedAnswer')
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
 
+const answers = computed(() => store.getters.getAnswers)
 const questionData = computed(() => store.getters.getQuestion)
 const routerPath = computed(() => route.path)
 const params = computed(() => route.params)
-const answers = store.getters.getAnswers
 const isActive = computed(() => (value) => selectedAnswer.value === value)
+const isLast = computed(() => (questionData.value.number === questionData.value.total) && (answers.value.length === questionData.value.total))
 
-console.log(questionData)
-const saveAnswer = async () => {
-  if (questionData.value.number >= questionData.value.total) return
+const query = gql`
+  query($quizId: String!,$answers: [answer]!) {
+    submitAnswer(quizId: $quizId, answers: $answers) {
+        id
+        answer
+        status
+        explanation
+    }
+  }
+`
+
+const variables = {
+  quizId: params.value.title.split("_")[0],
+  answers: answers.value
+}
+
+// console.log(answers.value.length === questionData.value.total - 1)
+// console.log(answers)
+// console.log(isLast)
+
+const handleSelect = async (event) => {
+  // console.log(event.target.value)
   const newAnswerObj = {
     id: questionData.value.question._id,
-    value: selectedAnswer.value
+    value: event.target.value
   }
   await store.dispatch('addAnswer', newAnswerObj)
+}
+const saveAnswer = async () => {
+  if (isLast) {
+    const {result} = useQuery(query, variables)
+    console.log(result)
+    return
+  }
 
   const {url, data} = await setCurrentPage({page: questionData.value.number + 1, path: routerPath.value, params: params.value})
   store.commit('setQuestionData', data)
@@ -47,8 +76,15 @@ const saveAnswer = async () => {
                :class="{active: isActive(option.value)}"
         >
           <span>{{option.tag}}.  {{option.value}}</span>
-          <input v-model="selectedAnswer" type="radio" name="option" :id="option.tag" class="" :value="option.value">
+          <input v-model="selectedAnswer" @click="handleSelect" type="radio" name="option" :id="option.tag" class="" :value="option.value">
         </label>
+      </div>
+      <div v-if="isLast" class="mt-20">
+        <h3 class="font-semibold">QuizMaster honor code <span class="text-[#0267FF] font-normal cursor-pointer">Learn more</span></h3>
+        <div class="flex gap-2 items-start mt-2">
+            <input class="w-[24px] h-[24px] cursor-pointer" type="checkbox" name="agreement" id="">
+          <h4 class="max-w-[795px]"><span class="font-semibold">I John Doe</span>, understand that submitting work that isn’t my own may result in permanent failure of this quiz or deactivations of my quiz master account.</h4>
+        </div>
       </div>
     </div>
     <span class="text-lg text-[#737373] bg-[#F2F2F2] p-2 rounded-md h-max">{{questionData.question.points
@@ -58,7 +94,7 @@ const saveAnswer = async () => {
       :disabled="!!!selectedAnswer"
       class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed transition duration-500 ease-in"
       @click="saveAnswer"
-  >Next</button>
+  >{{isLast ? 'Submit' : 'Next'}}</button>
 </template>
 
 <style scoped>

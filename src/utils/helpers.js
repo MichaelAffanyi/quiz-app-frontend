@@ -51,7 +51,6 @@ export const beforeQuestionsEnter = async (to, from, next) => {
     const {title, questionId} = to.params
     const id = questionId.split('_')[1]
     const quizId = title.split('_')[0]
-
     try {
         const response = await quizApi(`/${quizId}/${id}`)
         response.data.number = Number(id)

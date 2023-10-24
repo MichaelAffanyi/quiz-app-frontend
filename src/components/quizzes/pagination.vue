@@ -23,26 +23,6 @@ import {formatOptions, setCurrentPage} from "@/utils/helpers";
   }
   const isActive = computed(() => (page) => page === questionData.value.number)
 
-// const setCurrentPage = async (page) => {
-//   try {
-//     const routeArr = route.path.split('/')
-//     routeArr.pop()
-//     routeArr.push(`question_${page}`)
-//
-//     const {title, questionId} = route.params
-//     const quizId = title.split('_')[0]
-//     const response = await quizApi(`/${quizId}/${page}`)
-//
-//     response.data.number = Number(page)
-//     response.data.question.options = formatOptions(response.data.question.options)
-//     store.commit('setQuestionData', response?.data)
-//     selectedAnswer.value = ''
-//     await router.push(routeArr.join("/"))
-//   } catch (e) {
-//     console.log(e)
-//   }
-// }
-
 const handleClick = async (page) => {
   const {url, data} = await setCurrentPage({page, path: routerPath.value, params: params.value})
   store.commit('setQuestionData', data)

@@ -28,7 +28,7 @@ export const setQuestionData = (state, payload) => {
 }
 
 export const addToAnswers = (state, payload) => {
-    state.answers.push(payload)
+    state.answers = [...state.answers, payload]
 }
 
 export const replaceAnswer = (state, payload) => {
