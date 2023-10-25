@@ -79,6 +79,10 @@ const router = createRouter({
                     component: () => import("@/components/quizzes/quizOnBoarding.vue")
                 },
                 {
+                    path: 'answers',
+                    component: () => import("@/components/quizzes/answersComponent.vue")
+                },
+                {
                     path: ':questionId',
                     component: () => import("@/components/quizzes/questionComponent.vue"),
                     beforeEnter: beforeQuestionsEnter
