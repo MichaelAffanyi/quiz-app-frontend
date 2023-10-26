@@ -28,7 +28,7 @@ const goBack = () => {
 
 <template>
   <the-header v-if="!isAnswers"></the-header>
-  <div class="w-full font-semibold p-10 bg-[#0267FF] text-white capitalize grid grid-cols-3 items-center text-2xl justify-center" :class="{'grid-colsclear-2': isAnswers}">
+  <div class="w-full font-semibold p-10 bg-[#0267FF] text-white capitalize grid grid-cols-3 items-center text-2xl justify-center" :class="{'grid-cols-2': isAnswers}">
     <h3 v-if="isQuestions" class="justify-self-start">{{title}}</h3>
     <button @click="goBack" v-else-if="!isAnswers" class="w-[159px] h-[60px] border border-white rounded-lg justify-self-start">Back</button>
     <h3 v-if="isQuestions" class="justify-self-center">Question {{questionNum}} of 10</h3>
