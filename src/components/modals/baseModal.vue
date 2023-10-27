@@ -2,8 +2,12 @@
 import {ref} from "vue";
 import {deleteAccount, submitAnswer} from "@/utils/helpers";
 import {useStore} from "vuex";
+import {useRouter} from "vue-router";
+import gql from "graphql-tag";
+import {useQuery} from "@vue/apollo-composable";
 
 const store = useStore()
+const router = useRouter()
 const isLoading = ref(false)
 const isError = ref('')
 const isSuccess = ref('')
@@ -38,8 +42,13 @@ const handleAction = async () => {
     await deleteAccount({isLoading, isError, isSuccess})
   }
   if (props.type === "submitAnswer") {
-    const result = await submitAnswer({id: props.quizId, answers: props.answers})
-    console.log("Result:::", result.submitAnswers)
+    const onResult = await submitAnswer({id: props.quizId, answers: props.answers})
+    onResult(result => {
+    store.commit('setAnswersData', result.data.submitAnswers)
+    store.commit('toggleSubmitAnswerModal')
+    })
+    // console.log("Result:::", result)
+    router.replace("answers")
   }
 }
 

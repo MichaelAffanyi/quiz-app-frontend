@@ -156,6 +156,10 @@ export const submitAnswer = async ({id, answers}) => {
                 answer
                 status
                 explanation
+                options {
+                    tag
+                    value
+                }
             }
         }
     `
@@ -163,6 +167,10 @@ export const submitAnswer = async ({id, answers}) => {
         quizId: id,
         answers
     }
-    const {result} = await useQuery(query, variables)
-    return result.value
+    const {onResult, result, loading } = await useQuery(query, variables)
+    // onResult(result => {
+    //     console.log("result:::", result.data.submitAnswers)
+    // })
+    // console.log("yooo::::", result)
+    return onResult
 }

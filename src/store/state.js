@@ -8,5 +8,6 @@ export default {
     openDeleteModal: false,
     openSubmitAnswer: false,
     questionData: null,
+    answersData: null,
     answers: []
 }

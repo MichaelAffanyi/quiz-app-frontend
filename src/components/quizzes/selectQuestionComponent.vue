@@ -7,6 +7,7 @@ const store = useStore()
 const selectedAnswer = inject('selectedAnswer')
 const isActive = computed(() => (value) => selectedAnswer.value === value)
 
+const emits = defineEmits(['selectedValue'])
 const props = defineProps({
   data: {},
   isAnswer: {
@@ -18,6 +19,7 @@ const props = defineProps({
 
 const handleSelect = (event) => {
   if (props.isAnswer) return
+  emits('selectedValue', event.target.value)
   const newAnswerObj = {
     id: props.data._id,
     value: event.target.value

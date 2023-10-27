@@ -30,3 +30,7 @@ export const getQuestion = (state) => {
 export const getAnswers = (state) => {
     return state.answers
 }
+
+export const getAnswersData = (state) => {
+    return state.answersData
+}

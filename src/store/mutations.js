@@ -38,3 +38,7 @@ export const addToAnswers = (state, payload) => {
 export const replaceAnswer = (state, payload) => {
     state.answers[payload.index] = payload.value
 }
+
+export const setAnswersData = (state, payload) => {
+    state.answersData = payload
+}
