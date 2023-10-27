@@ -5,9 +5,9 @@
   import SelectQuestionComponent from "@/components/quizzes/selectQuestionComponent.vue";
 
   const store = useStore()
-  const answers = computed(() => store.getters.getAnswersData)
+  const answersData = computed(() => store.getters.getAnswersData)
 
-  console.log(answers.value)
+  console.log(answersData)
 </script>
 
 <template>
@@ -21,7 +21,15 @@
     </div>
     <button class="w-max h-max bg-[#0267FF] text-white px-8 py-3 rounded-lg">Next Item</button>
   </div>
-  <select-question-component v-for="answer in answers" :data="answer" is-answer></select-question-component>
+  <div class="w-full flex flex-col items-center">
+    <div v-for="answer in answersData.answers" class="mt-28 max-w-[814px]">
+      <select-question-component :data="answer" is-answer></select-question-component>
+      <div class="p-4 border border-[#33FF33] rounded-lg bg-[#CCFFCC] mt-14">
+        <h3 class="font-semibold">Answer {{answer.answer}}</h3>
+        <h4 class="text-[#737373]">{{answer.explanation}}</h4>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>

@@ -4,7 +4,6 @@ import {computed, inject, watch} from "vue";
 import {useStore} from "vuex";
 
 const store = useStore()
-const selectedAnswer = inject('selectedAnswer')
 const isActive = computed(() => (value) => selectedAnswer.value === value)
 
 const emits = defineEmits(['selectedValue'])
@@ -15,6 +14,12 @@ const props = defineProps({
     required: false,
     default: false
   }
+})
+
+const selectedAnswer = props.isAnswer ? '' : inject('selectedAnswer')
+const isCorrectAnswer = computed(() => (value) => {
+  if (!props.isAnswer) return false
+  return props.data.answer === value
 })
 
 const handleSelect = (event) => {
@@ -42,7 +47,7 @@ const handleSelect = (event) => {
                }"
         >
           <span>{{option.tag}}.  {{option.value}}</span>
-          <input v-model="selectedAnswer" @click="handleSelect" type="radio" name="option" :id="option.tag" class="" :value="option.value">
+          <input v-if="!isCorrectAnswer(option.value)" v-model="selectedAnswer" @click="handleSelect" type="radio" name="option" :id="option.tag" class="" :value="option.value">
         </label>
       </div>
       <slot name="approval"></slot>

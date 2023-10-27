@@ -152,14 +152,19 @@ export const submitAnswer = async ({id, answers}) => {
     const query = gql`
         query($quizId: String!,$answers: [answer!]) {
             submitAnswers(quizId: $quizId, answers: $answers) {
-                id
-                answer
-                status
-                explanation
-                options {
-                    tag
-                    value
+                answers {
+                    id
+                    question
+                    answer
+                    status
+                    explanation
+                    point
+                    options {
+                        tag
+                        value
+                    }
                 }
+                percentage
             }
         }
     `

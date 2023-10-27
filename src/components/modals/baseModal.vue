@@ -44,11 +44,14 @@ const handleAction = async () => {
   if (props.type === "submitAnswer") {
     const onResult = await submitAnswer({id: props.quizId, answers: props.answers})
     onResult(result => {
-    store.commit('setAnswersData', result.data.submitAnswers)
-    store.commit('toggleSubmitAnswerModal')
+      console.log(result.data.submitAnswers)
+      store.commit('setAnswersData', result.data.submitAnswers)
+      store.commit('toggleSubmitAnswerModal')
     })
     // console.log("Result:::", result)
-    router.replace("answers")
+    setTimeout(() => {
+      router.replace("answers")
+    }, 1500)
   }
 }
 
