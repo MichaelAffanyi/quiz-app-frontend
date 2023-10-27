@@ -173,9 +173,5 @@ export const submitAnswer = async ({id, answers}) => {
         answers
     }
     const {onResult, result, loading } = await useQuery(query, variables)
-    // onResult(result => {
-    //     console.log("result:::", result.data.submitAnswers)
-    // })
-    // console.log("yooo::::", result)
     return onResult
 }

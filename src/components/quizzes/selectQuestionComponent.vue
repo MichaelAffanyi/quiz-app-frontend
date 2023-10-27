@@ -43,7 +43,6 @@ const handleSelect = (event) => {
                class="border-2 border-[#737373] rounded-lg p-2 flex items-center w-[345px] justify-between cursor-pointer"
                :class="{
                  active: isActive(option.value),
-                 // correct:
                }"
         >
           <span>{{option.tag}}.  {{option.value}}</span>
