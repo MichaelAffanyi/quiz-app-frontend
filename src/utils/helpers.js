@@ -158,6 +158,7 @@ export const submitAnswer = async ({id, answers}) => {
                     answer
                     status
                     explanation
+                    selectedOption
                     point
                     options {
                         tag

@@ -1,0 +1,13 @@
+<script setup>
+
+</script>
+
+<template>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path d="M8.79995 15.8998L4.59995 11.6998L3.19995 13.0998L8.79995 18.6998L20.8 6.6998L19.4 5.2998L8.79995 15.8998Z" fill="#137A13"/>
+  </svg>
+</template>
+
+<style scoped>
+
+</style>
