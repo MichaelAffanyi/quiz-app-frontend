@@ -17,8 +17,16 @@ const duration = params.value.title.split('_')[1]
 const timer = ref(localStorage.getItem('timer') || `${duration.padStart(2, '0')}:00:00`)
 const bannerStyle = computed(() => isAnswers.value ? '' : 'justify-self-center')
 const gridCols = computed(() => isAnswers.value ? 'grid-cols-2' : 'grid-cols-3')
+const toggleShow = ref(false)
+const toggleShowStyle = computed(() => toggleShow.value ? 'translate-y-full' : 'translate-y-[-100px]')
 
 const getTimer = (time) => {
+  if (time === "00:05:00") {
+    toggleShow.value = !toggleShow.value
+    setTimeout(() => {
+      toggleShow.value = !toggleShow.value
+    }, 3000)
+  }
   timer.value = time
 }
 
@@ -29,6 +37,13 @@ const goBack = () => {
 </script>
 
 <template>
+  <div
+      class="fixed w-max left-0 right-0 mx-auto bg-red-200 px-8 py-2 rounded-full font-semibold text-red-500 flex items-center gap-4 transition transform duration-700 ease-in-out"
+      :class="toggleShowStyle"
+  >
+    <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+    Less than 5 minutes left
+  </div>
   <the-header v-if="!isAnswers"></the-header>
   <div class="w-full font-semibold p-10 bg-[#0267FF] text-white capitalize grid items-center text-2xl justify-center" :class="gridCols">
     <h3 v-if="isQuestions" class="justify-self-start">{{title}}</h3>

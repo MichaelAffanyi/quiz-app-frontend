@@ -21,22 +21,14 @@ export const beforeDashboardEnter = async (to, from, next) => {
     try {
         const res = await authApi('/showMe')
         store.commit('setUser', res?.data?.user)
+        // console.log(res?.data?.user)
+        // localStorage.setItem('user', JSON.stringify(res?.data?.user))
         if(res?.status === 200) {
             next()
         }
     } catch (e) {
         next('/login')
     }
-    // console.log(res)
-    // const store = useStore()
-    // const user = store.getters.getUser
-    // console.log(!user)
-    // if(Object.keys(user).length < 1) {
-    //     console.log(user)
-    //     next('/login')
-    // } else {
-    //     next()
-    // }
 }
 
 export const beforeLoginEnter = (to, from, next) => {
@@ -86,6 +78,7 @@ export const getQuizzes = async (url) => {
 }
 
 export const getTimer = (duration) => {
+    // console.log(duration)
     const minutes = Math.floor((duration % 3600) / 60)
     const hours = Math.floor(duration / 3600)
     const remainingSeconds = duration % 60

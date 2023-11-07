@@ -1,8 +1,8 @@
 <script setup>
-import {computed, provide, onMounted, ref, watch} from "vue";
+import {provide, onMounted, ref, watch} from "vue";
 import {beforeQuestionsEnter, getTimer} from "@/utils/helpers";
 import Pagination from "@/components/quizzes/pagination.vue";
-import {onBeforeRouteUpdate, useRoute} from "vue-router";
+import {onBeforeRouteUpdate} from "vue-router";
 import {useStore} from "vuex";
 import SingleQuestion from "@/components/quizzes/singleQuestion.vue";
 
@@ -11,21 +11,29 @@ const props = defineProps(['duration'])
 const secondsLeft = ref(Number(props.duration) * 60 * 60)
 const emit = defineEmits(['remainingTime'])
 const selectedAnswer = ref('')
-
+let intervalId;
 provide('selectedAnswer', selectedAnswer)
 // console.log(route.params)
 onMounted(() => {
-  setInterval(() => {
+  intervalId = setInterval(() => {
     secondsLeft.value--
   }, 1000)
 })
 
 watch(secondsLeft, (newValue) => {
+  if (newValue < 0) {
+    clearInterval(intervalId)
+    return
+  }
   emit('remainingTime', getTimer(newValue))
 })
 onBeforeRouteUpdate(async (to, from, next) => {
   await beforeQuestionsEnter(to, from, next)
   selectedAnswer.value = ""
+})
+
+onbeforeunload(() => {
+  window.confirm("Do you really want to leave?")
 })
 
 </script>

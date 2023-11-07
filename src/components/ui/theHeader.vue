@@ -14,6 +14,7 @@ const handleClick = (link) => {
 const handleLogout = async () => {
   // console.dir(document)
   await authApi('/logout')
+  localStorage.clear()
   location.reload()
 }
 
