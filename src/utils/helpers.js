@@ -16,21 +16,6 @@ export const beforeRegisterEnter = (to, from, next) => {
     }
 }
 
-export const beforeDashboardEnter = async (to, from, next) => {
-    const store = useStore()
-    try {
-        const res = await authApi('/showMe')
-        store.commit('setUser', res?.data?.user)
-        // console.log(res?.data?.user)
-        // localStorage.setItem('user', JSON.stringify(res?.data?.user))
-        if(res?.status === 200) {
-            next()
-        }
-    } catch (e) {
-        next('/login')
-    }
-}
-
 export const beforeLoginEnter = (to, from, next) => {
     const hasAccess = document.cookie.split(';').some(ele => ele.split("=")[0].trim() === 'accessToken')
     if(hasAccess) {

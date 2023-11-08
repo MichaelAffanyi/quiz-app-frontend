@@ -1,5 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {beforeRegisterEnter, beforeDashboardEnter, beforeLoginEnter, beforeQuestionsEnter} from "@/utils/helpers"
+import {beforeRegisterEnter, beforeLoginEnter, beforeQuestionsEnter} from "@/utils/helpers"
+import {useStore} from "vuex";
+import {authApi} from "@/utils";
 
 
 const router = createRouter({
@@ -54,7 +56,7 @@ const router = createRouter({
         {
             path: '/dashboard',
             component: () => import('@/views/dashboard.vue'),
-            beforeEnter: beforeDashboardEnter,
+            // beforeEnter: beforeDashboardEnter,
             children: [
                 {
                     path: 'profile',
@@ -93,7 +95,20 @@ const router = createRouter({
     scrollBehavior() {
         return {left: 0, top: 0}
     },
-    history: createWebHistory()
+    history: createWebHistory(),
+})
+
+router.beforeEach(async (to, from, next) => {
+    const store = useStore()
+    try {
+        const res = await authApi('/showMe')
+        store.commit('setUser', res?.data?.user)
+        if(res?.status === 200) {
+            next()
+        }
+    } catch (e) {
+        next('/login')
+    }
 })
 
 export default router
