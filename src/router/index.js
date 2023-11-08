@@ -100,6 +100,15 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const store = useStore()
+    const hasUser = Object.keys(store.getters.getUser).length > 0
+    if (hasUser) {
+        next()
+        return
+    }
+    if (to.fullPath === '/login') {
+        next()
+        return
+    }
     try {
         const res = await authApi('/showMe')
         store.commit('setUser', res?.data?.user)

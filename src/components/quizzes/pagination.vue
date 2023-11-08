@@ -10,6 +10,8 @@ import {useRouter} from "vue-router";
   const questionData = computed(() => store.getters.getQuestion)
   const currentPage = ref(questionData.value.number)
 
+console.log(currentPage)
+
   const pageNumbers = []
   for (let i = 1; i <= questionData.value.total; i++) {
     pageNumbers.push(i)
@@ -35,9 +37,9 @@ const setCurrentPage = (page) => {
   watch(currentPage,(newPage) => {
     router.push(`question_${newPage}`)
   })
-watch(questionData, (newValue) => {
-  currentPage.value = newValue.number
-  })
+// watch(questionData, (newValue) => {
+//   currentPage.value = newValue.number
+//   })
 </script>
 
 <template>

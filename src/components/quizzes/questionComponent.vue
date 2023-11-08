@@ -9,11 +9,11 @@ import SingleQuestion from "@/components/quizzes/singleQuestion.vue";
 const store = useStore()
 const props = defineProps(['duration'])
 const secondsLeft = ref(Number(props.duration) * 60 * 60)
-const emit = defineEmits(['remainingTime'])
+const emit = defineEmits(['remainingTime', 'done'])
 const selectedAnswer = ref('')
 let intervalId;
 provide('selectedAnswer', selectedAnswer)
-// console.log(route.params)
+
 onMounted(() => {
   intervalId = setInterval(() => {
     secondsLeft.value--
@@ -22,18 +22,16 @@ onMounted(() => {
 
 watch(secondsLeft, (newValue) => {
   if (newValue < 0) {
+    emit('done', true)
     clearInterval(intervalId)
     return
   }
   emit('remainingTime', getTimer(newValue))
 })
+
 onBeforeRouteUpdate(async (to, from, next) => {
   await beforeQuestionsEnter(to, from, next)
   selectedAnswer.value = ""
-})
-
-onbeforeunload(() => {
-  window.confirm("Do you really want to leave?")
 })
 
 </script>

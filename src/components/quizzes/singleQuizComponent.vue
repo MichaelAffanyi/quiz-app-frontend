@@ -3,6 +3,7 @@ import {useRoute, useRouter} from "vue-router";
 import {computed, ref, watch} from "vue";
 import TimerIcon from "@/assets/quizzes/timerIcon.vue";
 import {useStore} from "vuex";
+import Notification from "@/assets/quizzes/notification.vue";
 
 const route = useRoute()
 const router = useRouter()
@@ -18,7 +19,7 @@ const timer = ref(localStorage.getItem('timer') || `${duration.padStart(2, '0')}
 const bannerStyle = computed(() => isAnswers.value ? '' : 'justify-self-center')
 const gridCols = computed(() => isAnswers.value ? 'grid-cols-2' : 'grid-cols-3')
 const toggleShow = ref(false)
-const toggleShowStyle = computed(() => toggleShow.value ? 'translate-y-full' : 'translate-y-[-100px]')
+const timeout = ref(false)
 
 const getTimer = (time) => {
   if (time === "00:05:00") {
@@ -30,6 +31,10 @@ const getTimer = (time) => {
   timer.value = time
 }
 
+const handleSubmit = () => {
+  timeout.value = !timeout.value
+}
+
 const goBack = () => {
   router.go(-1)
 }
@@ -37,13 +42,14 @@ const goBack = () => {
 </script>
 
 <template>
-  <div
-      class="fixed w-max left-0 right-0 mx-auto bg-red-200 px-8 py-2 rounded-full font-semibold text-red-500 flex items-center gap-4 transition transform duration-700 ease-in-out"
-      :class="toggleShowStyle"
-  >
+  <notification :show="toggleShow" class="bg-red-200 text-red-500">
     <div class="w-2 h-2 bg-red-500 rounded-full"></div>
     Less than 5 minutes left
-  </div>
+  </notification>
+  <notification :show="timeout" class="bg-red-200 text-red-500">
+    <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+    Time out. Submitting quiz.
+  </notification>
   <the-header v-if="!isAnswers"></the-header>
   <div class="w-full font-semibold p-10 bg-[#0267FF] text-white capitalize grid items-center text-2xl justify-center" :class="gridCols">
     <h3 v-if="isQuestions" class="justify-self-start">{{title}}</h3>
@@ -60,7 +66,7 @@ const goBack = () => {
       </time>
     </div>
   </div>
-  <router-view @remaining-time="getTimer" :duration="duration"></router-view>
+  <router-view @done="handleSubmit" @remaining-time="getTimer" :duration="duration"></router-view>
 </template>
 
 <style scoped>

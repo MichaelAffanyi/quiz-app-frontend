@@ -14,6 +14,7 @@ const isChecked = ref(false)
 const isLast = computed(() => (questionData.value.number === questionData.value.total) && (answers.value.length === questionData.value.total))
 const currentPage = ref(questionData.value.number)
 const isActive = computed(() => (value) => selectedAnswer.value === value)
+const user = store.getters.getUser
 
 const handleSelect = (event) => {
   const newAnswerObj = {
@@ -41,7 +42,7 @@ watch(currentPage, (nextPage) => {
 
 <template>
   <div class="flex gap-[154px]">
-    <div class="max-w-[811px] flex flex-col items-center gap-[66px]">
+    <div class="max-w-[811px] flex flex-col gap-[66px]">
       <h4 class="text-2xl">{{questionData.question.question}}</h4>
       <div class="text-lg grid grid-cols-2 gap-x-[118px] gap-y-[37px]">
         <label v-for="option in questionData.question.options"
@@ -57,12 +58,12 @@ watch(currentPage, (nextPage) => {
         <h3 class="font-semibold">QuizMaster honor code <span class="text-[#0267FF] font-normal cursor-pointer">Learn more</span></h3>
         <div class="flex gap-2 items-start mt-2">
           <input @click="handleClick" class="w-[24px] h-[24px] cursor-pointer" type="checkbox" name="agreement" id="" :checked="isChecked">
-          <h4 class="max-w-[795px]"><span class="font-semibold">I John Doe</span>, understand that submitting work that isn’t my own may result in permanent failure of this quiz or deactivations of my quiz master account.</h4>
+          <h4 class="max-w-[795px]"><span class="font-semibold capitalize">I {{user.name}}</span>, understand that submitting work that isn’t my own may result in permanent failure of this quiz or deactivations of my quiz master account.</h4>
         </div>
       </div>
       <button
           :disabled="isLast ? !isChecked : !!!selectedAnswer"
-          class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed transition duration-500 ease-in"
+          class="w-[181px] h-10 bg-[#0267FF] text-white mb-40 rounded-lg disabled:opacity-25 disabled:cursor-not-allowed transition duration-500 ease-in self-center"
           @click="saveAnswer"
       >{{isLast ? 'Submit' : 'Next'}}</button>
     </div>
