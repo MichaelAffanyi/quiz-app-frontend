@@ -34,7 +34,7 @@ const handleCLick = async () => {
     console.log(res)
     if(res?.status === 200) {
       isLoading.value = false
-      router.replace('/register/add-interest')
+      router.replace('/auth/register/add-interest')
     }
   } catch (e) {
     isLoading.value = false

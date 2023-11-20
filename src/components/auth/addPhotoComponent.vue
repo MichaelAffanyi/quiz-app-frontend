@@ -33,7 +33,7 @@
       isLoading.value = true
       const res = await authApi.post('/upload-photo', profilePhotoForm)
       if(res?.status === 200) {
-        router.replace('/register/add-purpose')
+        router.replace('/auth/register/add-purpose')
       }
       isLoading.value = false
     } catch (e) {
@@ -63,7 +63,7 @@
         <label :for="!profilePhoto ? 'profile' : ''" @click="uploadProfile" class="bg-[#0267FF] px-14 py-3 text-white rounded-md cursor-pointer">
           {{buttonText}}
         </label>
-        <router-link v-if="!profilePhoto" to="/register/add-purpose" class="text-sm text-center mt-3 cursor-pointer">Skip</router-link>
+        <router-link v-if="!profilePhoto" to="/auth/register/add-purpose" class="text-sm text-center mt-3 cursor-pointer">Skip</router-link>
       </div>
     </div>
   </section>

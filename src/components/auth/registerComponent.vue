@@ -68,7 +68,7 @@ const handleSubmit = async () => {
       isSuccess.value.message = res?.data?.msg
       store.commit('setIsRegistered', true)
       setTimeout(() => {
-        router.replace('/register/add-photo')
+        router.replace('/auth/register/add-photo')
       }, 1000)
     }
   } catch (error) {
@@ -140,7 +140,7 @@ const handleSubmit = async () => {
         </span>
         <h2 class="text-[#A6A6A6] text-center">
           Already have an account?
-          <router-link to="/login" class="font-semibold text-[#0267FF] cursor-pointer">Login</router-link>
+          <router-link to="/auth/login" class="font-semibold text-[#0267FF] cursor-pointer">Login</router-link>
         </h2>
       </form>
     </div>

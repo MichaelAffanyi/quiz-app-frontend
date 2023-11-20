@@ -27,7 +27,6 @@ const isOpen = ref(false)
 
 const user = store.getters.getUser
 const hasUser = Object.keys(user).length > 0
-
 // const hasUser = Object.keys(user).length > 0
 </script>
 
@@ -57,12 +56,13 @@ const hasUser = Object.keys(user).length > 0
         </div>
         <h4 @click="handleClick('/dashboard/profile')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Profile</h4>
         <h4 @click="handleClick('/dashboard/profile/account-settings')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Account Settings</h4>
+        <h4 v-if="user.role === 'admin'" @click="handleClick('/dashboard/profile/upload-quiz')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Upload a quiz</h4>
         <h4 @click="handleLogout" class="py-3 px-2 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Logout</h4>
       </div>
     </section>
     <section v-else class="flex gap-6 items-center">
-      <router-link to="/login" class="text-[#0267FF] cursor-pointer hover:bg-blue-50 p-2 rounded-lg" >Login</router-link>
-      <router-link to="/register" class="bg-[#0267FF] p-2 text-white rounded-md hover:opacity-75">Register</router-link>
+      <router-link to="/auth/login" class="text-[#0267FF] cursor-pointer hover:bg-blue-50 p-2 rounded-lg" >Login</router-link>
+      <router-link to="/auth/register" class="bg-[#0267FF] p-2 text-white rounded-md hover:opacity-75">Register</router-link>
     </section>
   </div>
 </template>

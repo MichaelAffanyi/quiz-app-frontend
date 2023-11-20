@@ -9,7 +9,7 @@ export const beforeRegisterEnter = (to, from, next) => {
     const store = useStore()
     const isRegistered = store.getters.isRegistered
     if(!isRegistered) {
-        next('/register')
+        next('/auth/register')
     }
     else {
         next()

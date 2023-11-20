@@ -35,7 +35,7 @@
       console.log(res)
       isLoading.value = false
       if(res?.status === 200) {
-        router.push('/register/off-boarding')
+        router.push('/auth/register/off-boarding')
       }
     } catch (e) {
       isLoading.value = false

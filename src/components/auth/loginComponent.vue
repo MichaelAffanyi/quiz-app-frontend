@@ -66,7 +66,7 @@
         <h1 class="header1">Log in</h1>
         <h2 class="text-[#A6A6A6]">
           New member?
-          <router-link to="/register" class="font-semibold text-[#0267FF] cursor-pointer">Sign up</router-link>
+          <router-link to="/auth/register" class="font-semibold text-[#0267FF] cursor-pointer">Sign up</router-link>
         </h2>
         <div class="auth-form-control">
           <label for="email">Email</label>
@@ -104,7 +104,7 @@
             />
           </div>
           <label for="remember-me">Remember Me</label>
-          <router-link to="/reset-password" class="ml-auto text-[#0267FF] cursor-pointer">Forgot password?</router-link>
+          <router-link to="/auth/reset-password" class="ml-auto text-[#0267FF] cursor-pointer">Forgot password?</router-link>
         </div>
         <p v-if="isError" class="error max-w-[285px]">Oops! Your email or password appears to be incorrect. Please double-check your login details and try again.</p>
         <base-button class="mt-4">{{isLoading ? 'Loading...' : 'Log in'}}</base-button>

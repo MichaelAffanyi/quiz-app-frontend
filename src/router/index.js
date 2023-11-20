@@ -15,12 +15,12 @@ const router = createRouter({
             component: () =>  import("@/views/auth.vue")
         },
         {
-            path: '/login',
+            path: '/auth/login',
             component: () => import("@/views/login.vue"),
             beforeEnter: beforeLoginEnter
         },
         {
-            path: '/register',
+            path: '/auth/register',
             component: () => import("@/views/register.vue"),
             children: [
                 {
@@ -46,11 +46,11 @@ const router = createRouter({
             ]
         },
         {
-            path: '/reset-password',
+            path: '/auth/reset-password',
             component: () => import("@/views/forgotPassword.vue")
         },
         {
-            path: '/reset-password/:token',
+            path: '/auth/reset-password/:token',
             component: () => import("@/views/resetPassword.vue")
         },
         {
@@ -69,6 +69,10 @@ const router = createRouter({
                 {
                     path: 'profile/account-settings',
                     component: () => import("@/views/accountSettings.vue")
+                },
+                {
+                    path: 'profile/upload-quiz',
+                    component: () => import("@/views/uploadQuiz.vue")
                 }
             ]
         },
@@ -100,6 +104,10 @@ const router = createRouter({
                     beforeEnter: beforeQuestionsEnter
                 }
             ]
+        },
+        {
+            path: "/:pathMatch(.*)*",
+            redirect: "/auth/login"
         }
     ],
     scrollBehavior() {
@@ -115,7 +123,7 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
     }
-    if (to.fullPath === '/login') {
+    if (to.fullPath.includes('/auth') || to.fullPath === '/') {
         next()
         return
     }
@@ -126,7 +134,7 @@ router.beforeEach(async (to, from, next) => {
             next()
         }
     } catch (e) {
-        next('/login')
+        next('/auth/login')
     }
 })
 
