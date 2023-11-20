@@ -20,7 +20,7 @@ const isRegistered = computed(() => store.getters.isRegistered)
 </script>
 
 <template>
-  <register-component v-if="!isRegistered"></register-component>
+  <register-component v-if="!isRegistered"></register-component>z
   <router-view v-else></router-view>
 </template>
 

@@ -10,7 +10,6 @@ import {useRouter} from "vue-router";
   const questionData = computed(() => store.getters.getQuestion)
   const currentPage = ref(questionData.value.number)
 
-console.log(currentPage)
 
   const pageNumbers = []
   for (let i = 1; i <= questionData.value.total; i++) {

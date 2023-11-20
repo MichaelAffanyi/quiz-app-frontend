@@ -14,6 +14,9 @@ const isChecked = ref(false)
 const isLast = computed(() => (questionData.value.number === questionData.value.total) && (answers.value.length === questionData.value.total))
 const currentPage = ref(questionData.value.number)
 const isActive = computed(() => (value) => selectedAnswer.value === value)
+const alreadySelected = computed(() => (value) => {
+  return answers.value.findIndex(ele => ele.value === value) !== -1
+})
 const user = store.getters.getUser
 
 const handleSelect = (event) => {
@@ -38,6 +41,10 @@ const handleClick = (event) => {
 watch(currentPage, (nextPage) => {
   router.push(`question_${nextPage}`)
 })
+
+// watch(answers, (value) => {
+//   console.log(value)
+// })
 </script>
 
 <template>
@@ -48,10 +55,10 @@ watch(currentPage, (nextPage) => {
         <label v-for="option in questionData.question.options"
                :for="option.tag"
                class="border-2 border-[#737373] rounded-lg p-2 flex items-center w-[345px] justify-between cursor-pointer"
-               :class="{active: isActive(option.value)}"
+               :class="{active: alreadySelected(option.value) ? true : isActive(option.value)}"
         >
           <span>{{option.tag}}.  {{option.value}}</span>
-          <input @click="handleSelect" v-model="selectedAnswer" type="radio" name="option" :id="option.tag" class="" :value="option.value">
+          <input @click="handleSelect" v-model="selectedAnswer" type="radio" name="option" :id="option.tag" class="" :value="option.value" :checked="alreadySelected(option.value)">
         </label>
       </div>
       <div v-if="isLast" class="mt-20">

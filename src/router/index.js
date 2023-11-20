@@ -82,7 +82,17 @@ const router = createRouter({
                 },
                 {
                     path: 'answers',
-                    component: () => import("@/components/quizzes/answersComponent.vue")
+                    component: () => import("@/components/quizzes/answersComponent.vue"),
+                    beforeEnter: (to, from, next) => {
+                        const store = useStore()
+                        const {params: {title}} = to
+                        const hasAnswers = store.getters.getAnswersData
+                        if (!hasAnswers) {
+                            next(`/quizzes/${title}`)
+                            return
+                        }
+                        next()
+                    }
                 },
                 {
                     path: ':questionId',
