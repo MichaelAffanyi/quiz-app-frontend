@@ -46,11 +46,11 @@ const handleAction = async () => {
     onResult(result => {
       console.log(result.data.submitAnswers)
       store.commit('setAnswersData', result.data.submitAnswers)
-      store.commit('toggleSubmitAnswerModal')
     })
     // console.log("Result:::", result)
     setTimeout(() => {
       router.replace("answers")
+      store.commit('toggleSubmitAnswerModal')
     }, 1500)
   }
 }

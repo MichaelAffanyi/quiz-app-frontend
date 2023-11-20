@@ -4,14 +4,19 @@
   import {computed} from "vue";
   import CorrectCheck from "@/assets/quizzes/correctCheck.vue";
   import WrongMark from "@/assets/quizzes/wrongMark.vue";
+  import {useRoute, useRouter} from "vue-router";
 
   const store = useStore()
+  const router = useRouter()
   const answersData = computed(() => store.getters.getAnswersData)
   const showMark = computed(() => (selectedAnswer, correctAnswer) => selectedAnswer === correctAnswer ? CorrectCheck : WrongMark)
   const statusHeading = computed(() => answersData.percentage >= 80 ? 'Congratulations! You passed!' : 'Sorry! You failed!')
   const statusColor = computed(() => answersData.percentage >= 80 ? 'text-[#33FF33]' : 'text-[#FF3333]')
 
-  console.log(answersData)
+  const handleTryAgain = () => {
+    router.replace('question_1')
+  }
+
 </script>
 
 <template>
@@ -23,7 +28,7 @@
         <span>To pass 80% or higher</span>
       </div>
     </div>
-    <button class="w-max h-max bg-[#0267FF] text-white px-8 py-3 rounded-lg">Next Item</button>
+    <router-link to="quizzes" class="w-max h-max bg-[#0267FF] text-white px-8 py-3 rounded-lg">Next Item</router-link>
   </div>
   <div class="w-full flex flex-col items-center mb-20">
     <div v-for="answer in answersData.answers" class="mt-28 max-w-[814px]">
@@ -45,7 +50,7 @@
     </div>
   </div>
   <div class="w-full flex justify-center mb-28">
-    <button class="bg-[#0267FF] text-white text-lg px-6 py-2 rounded-md">Try again</button>
+    <button @click="handleTryAgain" class="bg-[#0267FF] text-white text-lg px-6 py-2 rounded-md">Try again</button>
   </div>
 </template>
 
