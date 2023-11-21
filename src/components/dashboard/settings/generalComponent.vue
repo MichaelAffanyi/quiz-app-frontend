@@ -5,7 +5,7 @@ import {useStore} from "vuex";
 import {computed, ref, watch} from "vue";
 import {validateInput, validateOnInput} from "@/utils/validateInput";
 import {authApi, settingsApi} from "@/utils";
-import {handleInput} from "@/utils/helpers";
+import {handleInput, updateUser} from "@/utils/helpers";
 
 const store = useStore()
 
@@ -35,21 +35,17 @@ const errors = ref({
 const handleImageUpload = async (event) => {
   const imageForm = new FormData()
   imageForm.set('image', event.target.files[0])
-  try {
+
     isLoading.value = true
-    const res = await authApi.post('/upload-photo', imageForm)
+    const res = await updateUser({url: '/upload-photo', data: imageForm})
     if(res?.status === 200) {
       store.commit('updateImage', res?.data?.image)
     }
-    else {
-      uploadError.value = "Can't update profile now. Please try again later"
-    }
-    isLoading.value = false
-  } catch (e) {
-    isLoading.value = false
-    uploadError.value = e?.response?.data?.error
-    console.log(e)
+  else {
+    uploadError.value = res?.data?.error || "Can't upload image now, try again later"
+    console.log(res?.data?.error)
   }
+  isLoading.value = false
 }
 
 const handleSubmit = async () => {
@@ -68,7 +64,7 @@ const handleSubmit = async () => {
   }
   try {
     isUpdating.value = true
-    const res = await settingsApi.post('/general', data)
+    const res = await settingsApi().post('/general', data)
     // console.log(res)
     if (res?.status === 200) {
       store.commit('setUser', res?.data)

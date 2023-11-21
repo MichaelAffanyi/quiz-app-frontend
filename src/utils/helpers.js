@@ -3,6 +3,7 @@ import {authApi, quizApi, settingsApi} from "@/utils/index";
 import {validateOnInput} from "@/utils/validateInput";
 import gql from "graphql-tag"
 import {useQuery} from "@vue/apollo-composable";
+import Cookie from "js-cookie";
 
 export const beforeRegisterEnter = (to, from, next) => {
     const store = useStore()
@@ -82,6 +83,19 @@ export const getUser = async () => {
 
 }
 
+export const updateUser = async ({url, data}) => {
+    const token = document.cookie?.split(';').find(ele => ele.split("=")[0].trim() === 'accessToken')?.split("=")[1]
+    try {
+        return await authApi.post(url, data, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    } catch (e) {
+        return e.response
+    }
+}
+
 export const getTimer = (duration) => {
     // console.log(duration)
     const minutes = Math.floor((duration % 3600) / 60)
@@ -132,11 +146,12 @@ export const setCurrentPage = async ({path, params, page}) => {
 export const deleteAccount = async ({isLoading, isSuccess, isError}) => {
     try {
         isLoading.value = true
-        const res = await settingsApi.delete('/delete-account')
+        const res = await settingsApi().delete('/delete-account')
         if(res?.status === 200) {
             isSuccess.value = 'Account deleted successfully'
             isLoading.value = false
             setTimeout(() => {
+                Cookie.remove('accessToken')
                 location.reload()
             }, 1500)
         }

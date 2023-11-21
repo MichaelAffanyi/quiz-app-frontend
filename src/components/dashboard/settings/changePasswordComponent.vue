@@ -27,7 +27,7 @@ const handleSubmit = async () => {
       newPassword: newPassword.value,
       confirmPassword: confirmPassword.value
     }
-    const res = await settingsApi.post('/change-password', data)
+    const res = await settingsApi().post('/change-password', data)
     if(res?.status === 200) {
       isLoading.value = false
       isSuccess.value = "Password updated successfully"

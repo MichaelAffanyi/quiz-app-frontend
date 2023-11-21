@@ -6,6 +6,7 @@
   import {useStore} from "vuex";
   import {authApi} from "@/utils";
   import {useRouter} from "vue-router";
+  import {updateUser} from "@/utils/helpers";
 
   const profilePhoto = ref(null)
   const profileSrc = computed(() => profilePhoto.value ? URL.createObjectURL(profilePhoto.value) : avatarIcon)
@@ -29,17 +30,17 @@
     const profilePhotoForm = new FormData()
     profilePhotoForm.set('image', profilePhoto.value)
 
-    try {
-      isLoading.value = true
-      const res = await authApi.post('/upload-photo', profilePhotoForm)
-      if(res?.status === 200) {
-        router.replace('/auth/register/add-purpose')
-      }
-      isLoading.value = false
-    } catch (e) {
-      isLoading.value = false
-      console.log(e)
+    isLoading.value = true
+    const res = await updateUser({url: '/upload-photo', data: profilePhotoForm})
+      // const res = await authApi.post('/upload-photo', profilePhotoForm)
+    if(res.status === 200) {
+      router.replace('/auth/register/add-purpose')
     }
+    else {
+      // isLoading.value = false
+      console.log(res?.data?.error || 'Something went wrong')
+    }
+    isLoading.value = false
   }
 </script>
 

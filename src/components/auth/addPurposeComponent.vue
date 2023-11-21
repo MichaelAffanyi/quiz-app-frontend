@@ -6,6 +6,7 @@ import {ref, watch} from "vue";
 import {authApi} from "@/utils";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
+import {updateUser} from "@/utils/helpers";
 
 const selectedPurposes = ref([])
 const isLoading = ref(false)
@@ -25,21 +26,17 @@ const addToSelected = (purpose) => {
 
 const handleCLick = async () => {
   if(selectedPurposes.value.length < 1) return
-  try {
-    isLoading.value = true
-    const res = await authApi.post('/add-purpose', {
-      id,
-      purpose: selectedPurposes.value
-    })
-    console.log(res)
-    if(res?.status === 200) {
-      isLoading.value = false
-      router.replace('/auth/register/add-interest')
-    }
-  } catch (e) {
+  isLoading.value = true
+  const res = await updateUser({url: '/add-purpose', data: {id, purpose: selectedPurposes.value}})
+
+  if(res?.status === 200) {
     isLoading.value = false
-    console.log(e)
+    router.replace('/auth/register/add-interest')
   }
+  else {
+    console.log(res?.data?.error || 'Something went wrong')
+  }
+  isLoading.value = false
 }
 
 </script>
@@ -57,7 +54,7 @@ const handleCLick = async () => {
         <div class="flex flex-col gap-6">
           <purpose-card @add-to-selected="addToSelected" title="Social Interaction"></purpose-card>
           <purpose-card @add-to-selected="addToSelected" title="Personal development"></purpose-card>
-          <purpose-card @add-to-selected="addToSelected" title="Entertainment and Fun "></purpose-card>
+          <purpose-card @add-to-selected="addToSelected" title="Entertainment and Fun"></purpose-card>
           <purpose-card @add-to-selected="addToSelected" title="Rewards and recognition"></purpose-card>
         </div>
         <base-button @click="handleCLick" class="mt-20">{{isLoading ? 'Adding...' : 'Continue'}}</base-button>

@@ -6,6 +6,7 @@
   import {authApi} from "@/utils";
   import {useStore} from "vuex";
   import {useRouter} from "vue-router";
+  import {updateUser} from "@/utils/helpers";
 
   const selected = ref([])
   const isLoading = ref(false)
@@ -26,21 +27,15 @@
 
   const handleClick = async () => {
     if(selected.value.length < 1) return
-    try {
-      isLoading.value = true
-      const res = await authApi.post('/add-interests', {
-        id,
-        interests: selected.value
-      })
-      console.log(res)
-      isLoading.value = false
-      if(res?.status === 200) {
-        router.push('/auth/register/off-boarding')
-      }
-    } catch (e) {
-      isLoading.value = false
-      console.log(e)
+    isLoading.value = true
+    const res = await updateUser({url: '/add-interests', data: {id, interests: selected.value}})
+    if(res.status === 200) {
+      router.push('/auth/register/off-boarding')
     }
+    else {
+      console.log(res?.data?.error || 'Something went wrong')
+    }
+    isLoading.value = false
   }
 </script>
 

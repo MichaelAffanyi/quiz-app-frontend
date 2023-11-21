@@ -4,6 +4,7 @@ import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
 import {authApi} from "@/utils";
+import Cookie from "js-cookie";
 const store = useStore()
 const router = useRouter()
 const handleClick = (link) => {
@@ -15,6 +16,7 @@ const handleLogout = async () => {
   // console.dir(document)
   await authApi('/logout')
   localStorage.clear()
+  Cookie.remove('accessToken')
   location.reload()
 }
 

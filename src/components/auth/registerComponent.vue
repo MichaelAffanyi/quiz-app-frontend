@@ -7,6 +7,7 @@ import {authApi} from '@/utils'
 import {useRouter} from "vue-router";
 import {validateOnInput, validateInput} from "@/utils/validateInput";
 import {useStore} from "vuex";
+import Cookie from "js-cookie";
 
 const router = useRouter()
 const name = ref('')
@@ -64,6 +65,7 @@ const handleSubmit = async () => {
     }
     const res = await authApi.post('/register', newUser)
     if(res?.status === 200) {
+      Cookie.set('accessToken', res?.data?.token)
       isSuccess.value.value = true
       isSuccess.value.message = res?.data?.msg
       store.commit('setIsRegistered', true)
@@ -134,10 +136,10 @@ const handleSubmit = async () => {
         <base-button class="mt-4">
           {{isLoading ? 'Loading...' : 'Create Account'}}
         </base-button>
-        <span class="w-full border rounded-md flex items-center gap-8 pl-16 py-2 cursor-pointer">
-          <img :src="googleIcon" alt="">
-          Sign up with Google
-        </span>
+<!--        <span class="w-full border rounded-md flex items-center gap-8 pl-16 py-2 cursor-pointer">-->
+<!--          <img :src="googleIcon" alt="">-->
+<!--          Sign up with Google-->
+<!--        </span>-->
         <h2 class="text-[#A6A6A6] text-center">
           Already have an account?
           <router-link to="/auth/login" class="font-semibold text-[#0267FF] cursor-pointer">Login</router-link>
