@@ -5,15 +5,15 @@ import {computed, ref, watch} from "vue";
 const props = defineProps({
   label: String,
   type: String,
-  value: String,
   modelValue: String,
-  isError: {
-    type: Boolean,
-    default: false
-  },
+  isError: Boolean,
+  message: String
 })
+const emit = defineEmits(['update:value'])
 
 const isFocused = ref(false)
+const value = ref('')
+const isErrorRef = ref(props.isError)
 
 const spanStyles = computed(() => {
   if(props.isError) return 'translate-y-[-50%] scale-[0.80] text-[#EF4444] bg-white'
@@ -29,27 +29,28 @@ const containerStyles = computed(() => {
 })
 
 const handleUnFocus = () => {
-  if(props.value.trim === '') {
+  if(value.value.trim() === '') {
     isFocused.value = false
   }
 }
 
-// watch(valueRef, (newValue) => {
-//   // emit('update:value', newValue)
-//   console.log(newValue)
-// })
+watch(value, (newValue) => {
+  props.isError = newValue.trim() === '';
+  emit('update:value', {name: props.label.toLowerCase(), value: newValue})
+})
 
 </script>
 
 <template>
 <div>
   <div class="w-full relative h-10 px-3 border-2 rounded-lg" :class="containerStyles">
-    <span class="absolute text-gray-400 transition duration-300 ease-linear" :class="spanStyles">{{label}}</span>
-    <input @input="$emit('setData', {
-      name: label.toLowerCase(),
-      value: $event.target.value,
-    })" @focus="isFocused = true" @blur="handleUnFocus" class="bg-transparent absolute inset-0 focus:outline-0 px-3" :type="type">
+    <p class="absolute transition duration-300 ease-linear" :class="spanStyles">
+      {{label}}
+      <span class="text-red-500">*</span>
+    </p>
+    <input v-model="value" @focus="isFocused = true" @blur="handleUnFocus" class="bg-transparent absolute inset-0 focus:outline-0 px-3" :type="type">
   </div>
+  <p v-if="isError" class="text-sm text-red-500">{{label}} can't be empty</p>
 </div>
 </template>
 
