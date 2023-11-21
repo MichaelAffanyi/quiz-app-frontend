@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import {beforeRegisterEnter, beforeLoginEnter, beforeQuestionsEnter} from "@/utils/helpers"
 import {useStore} from "vuex";
 import {authApi} from "@/utils";
+import {getUser} from "@/utils/helpers";
 
 
 const router = createRouter({
@@ -123,17 +124,16 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
     }
-    if (to.fullPath.includes('/auth') || to.fullPath === '/') {
+    if (to.fullPath.includes('/auth')) {
         next()
         return
     }
-    try {
-        const res = await authApi('/showMe')
+    const res = await getUser()
+    if(res.status === 200) {
         store.commit('setUser', res?.data?.user)
-        if(res?.status === 200) {
-            next()
-        }
-    } catch (e) {
+        next()
+    }
+    else {
         next('/auth/login')
     }
 })

@@ -36,8 +36,9 @@
   const path = computed(() => `${route.path}/question_1`)
 
   const moveToQuestion = () => {
-    // router.replace(path.value)
-    window.open(`${window.location.href}/question_1`, '_blank')
+    // console.log(path.value)
+    router.replace(path.value)
+    // window.open(`${window.location.href}/question_1`,)
   }
 
 </script>

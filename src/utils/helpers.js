@@ -2,7 +2,6 @@ import {useStore} from "vuex";
 import {authApi, quizApi, settingsApi} from "@/utils/index";
 import {validateOnInput} from "@/utils/validateInput";
 import gql from "graphql-tag"
-import {useRoute} from "vue-router";
 import {useQuery} from "@vue/apollo-composable";
 
 export const beforeRegisterEnter = (to, from, next) => {
@@ -54,12 +53,33 @@ export const handleInput = (event, error) => {
 }
 
 export const getQuizzes = async (url) => {
+    const token = document.cookie?.split(';').find(ele => ele.split("=")[0].trim() === 'accessToken')?.split("=")[1]
+    console.log(token)
     try {
-        const response = await quizApi(url)
+        const response = await quizApi(url, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
         return response?.data
     } catch (e) {
         console.log(e)
     }
+}
+
+export const getUser = async () => {
+    const token = document.cookie?.split(';').find(ele => ele.split("=")[0].trim() === 'accessToken')?.split("=")[1]
+    try {
+        return await authApi('/showMe', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    } catch (e) {
+        // console.log(e)
+        return e.response
+    }
+
 }
 
 export const getTimer = (duration) => {

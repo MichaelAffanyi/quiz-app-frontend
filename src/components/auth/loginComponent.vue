@@ -5,6 +5,7 @@
   import {authApi} from "@/utils";
   import {validateInput, validateOnInput} from "@/utils/validateInput";
   import {useRouter} from "vue-router";
+  import Cookie from 'js-cookie'
   import axios from "axios";
 
   const store = useStore()
@@ -43,8 +44,11 @@
         rememberMe: rememberMe.value
       }
       const res = await authApi.post('/login', user)
+      // console.log(res.headers)
       if(res?.status === 200) {
         isLoading.value = false
+        const cookie = res.data.token
+        Cookie.set('accessToken', cookie, {expires: 1})
         router.push('/dashboard/profile')
       }
     } catch (e) {

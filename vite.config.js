@@ -8,18 +8,9 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  define: { 'process.env': {} },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://quiz-app-endpoint-jb8d.onrender.com/',
-        changeOrigin: true
-      }
     }
   }
 })
