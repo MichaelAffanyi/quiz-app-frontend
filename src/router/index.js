@@ -124,12 +124,17 @@ router.beforeEach(async (to, from, next) => {
         next()
         return
     }
-    if (to.fullPath.includes('/auth')) {
+    if (to.fullPath.includes('/auth') || to.fullPath === '/') {
         next()
         return
     }
     const res = await getUser()
-    if(res.status === 200) {
+    console.log(res)
+    // if (!res && to.fullPath === '/') {
+    //     next()
+    //     return
+    // }
+    if(res.status && res.status === 200) {
         store.commit('setUser', res?.data?.user)
         next()
     }

@@ -17,6 +17,15 @@ export const beforeRegisterEnter = (to, from, next) => {
 }
 
 export const beforeLoginEnter = (to, from, next) => {
+    // const store = useStore()
+    // const res = getUser()
+    // // console.log(res)
+    // if (res?.status === 200) {
+    //     store.commit('setUser', res?.data?.user)
+    //     next('/dashboard/profile')
+    // } else {
+    //     next()
+    // }
     const hasAccess = document.cookie.split(';').some(ele => ele.split("=")[0].trim() === 'accessToken')
     if(hasAccess) {
        next('/dashboard/profile')
@@ -31,7 +40,7 @@ export const beforeQuestionsEnter = async (to, from, next, update = false) => {
     const id = questionId.split('_')[1]
     const quizId = title.split('_')[0]
     try {
-        const response = await quizApi(`/${quizId}/${id}`)
+        const response = await quizApi().get(`/${quizId}/${id}`)
         response.data.number = Number(id)
         response.data.question.options = formatOptions(response.data.question.options)
         store.commit('setQuestionData', response?.data)
@@ -57,7 +66,7 @@ export const getQuizzes = async (url) => {
     const token = document.cookie?.split(';').find(ele => ele.split("=")[0].trim() === 'accessToken')?.split("=")[1]
     console.log(token)
     try {
-        const response = await quizApi(url, {
+        const response = await quizApi().get(url, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -130,7 +139,7 @@ export const setCurrentPage = async ({path, params, page}) => {
 
         const {title, questionId} = params
         const quizId = title.split('_')[0]
-        const response = await quizApi(`/${quizId}/${page}`)
+        const response = await quizApi().get(`/${quizId}/${page}`)
 
         response.data.number = Number(page)
         response.data.question.options = formatOptions(response.data.question.options)

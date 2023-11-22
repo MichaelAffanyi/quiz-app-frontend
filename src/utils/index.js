@@ -16,9 +16,12 @@ export const settingsApi = () => {
     })
 
 }
-export const quizApi = axios.create({
-    baseURL: `${baseURL}/quizzes`,
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-})
+export const quizApi = () => {
+    const token = document.cookie?.split(';').find(ele => ele.split("=")[0].trim() === 'accessToken')?.split("=")[1]
+    return axios.create({
+        baseURL: `${baseURL}/quizzes`,
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+}
