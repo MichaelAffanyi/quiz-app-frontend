@@ -13,7 +13,6 @@ const emit = defineEmits(['update:value'])
 
 const isFocused = ref(false)
 const value = ref('')
-const isErrorRef = ref(props.isError)
 
 const spanStyles = computed(() => {
   if(props.isError) return 'translate-y-[-50%] scale-[0.80] text-[#EF4444] bg-white'
@@ -35,7 +34,6 @@ const handleUnFocus = () => {
 }
 
 watch(value, (newValue) => {
-  props.isError = newValue.trim() === '';
   emit('update:value', {name: props.label.toLowerCase(), value: newValue})
 })
 

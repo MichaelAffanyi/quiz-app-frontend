@@ -64,6 +64,10 @@ const router = createRouter({
                     component: () => import("@/views/profile.vue")
                 },
                 {
+                    path: 'profile/:quizId/add-question',
+                    component: () => import("@/views/addQuestion.vue")
+                },
+                {
                     path: 'profile/quizzes',
                     component: () => import("@/views/quizzes.vue")
                 },
@@ -129,7 +133,6 @@ router.beforeEach(async (to, from, next) => {
         return
     }
     const res = await getUser()
-    console.log(res)
     // if (!res && to.fullPath === '/') {
     //     next()
     //     return

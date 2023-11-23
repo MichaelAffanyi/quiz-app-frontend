@@ -64,7 +64,6 @@ export const handleInput = (event, error) => {
 
 export const getQuizzes = async (url) => {
     const token = document.cookie?.split(';').find(ele => ele.split("=")[0].trim() === 'accessToken')?.split("=")[1]
-    console.log(token)
     try {
         const response = await quizApi().get(url, {
             headers: {
