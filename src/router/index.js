@@ -137,7 +137,7 @@ router.beforeEach(async (to, from, next) => {
     //     next()
     //     return
     // }
-    if(res.status && res.status === 200) {
+    if(res.status === 200) {
         store.commit('setUser', res?.data?.user)
         next()
     }

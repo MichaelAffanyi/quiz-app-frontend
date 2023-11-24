@@ -5,6 +5,26 @@ import gql from "graphql-tag"
 import {useQuery} from "@vue/apollo-composable";
 import Cookie from "js-cookie";
 
+
+export const validateFields = (fields) => {
+    let isValid = true
+    Object.keys(fields.value).map((field) => {
+        if(typeof fields.value[field].value === 'string') {
+            if(fields.value[field].value.trim() === '') {
+                isValid = false
+                fields.value[field].isError = true
+            }
+        }
+        else {
+            if(!fields.value[field].value) {
+                isValid = false
+                fields.value[field].isError = true
+            }
+        }
+    })
+    return isValid
+}
+
 export const beforeRegisterEnter = (to, from, next) => {
     const store = useStore()
     const isRegistered = store.getters.isRegistered
