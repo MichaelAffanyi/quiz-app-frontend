@@ -42,6 +42,9 @@ const handleUnFocus = () => {
 }
 
 watch(value, (newValue) => {
+  if (props.label === 'Points' && /\D/.test(newValue)) {
+    value.value = newValue.replace(/\D/g, '')
+  }
   emit('update:value', {name: props.label.toLowerCase(), value: newValue})
 })
 
@@ -54,13 +57,26 @@ watch(value, (newValue) => {
       {{label}}
       <span class="text-red-500">*</span>
     </p>
-    <textarea v-if="large" name="largeInput" id="largeInput" class="bg-transparent absolute inset-0 focus:outline-0 px-3"></textarea>
-    <input v-else v-model="value" @focus="isFocused = true" @blur="handleUnFocus" class="bg-transparent absolute inset-0 focus:outline-0 px-3" :type="type">
+    <textarea v-if="large" v-model="value" @focus="isFocused = true" @blur="handleUnFocus" name="largeInput" id="largeInput" class="input resize-none px-3 pt-3"></textarea>
+    <input v-else v-model="value" @focus="isFocused = true" @blur="handleUnFocus" class="input px-3" :type="type">
   </div>
   <p v-if="isError" class="text-sm text-red-500">{{label}} can't be empty</p>
 </div>
 </template>
 
 <style scoped>
+
+.input {
+  background: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.input:focus {
+  outline: none;
+}
 
 </style>

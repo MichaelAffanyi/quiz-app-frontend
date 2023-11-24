@@ -13,7 +13,7 @@ const title = computed(() => params.value.title.split('_').at(-1).split("-").joi
 const questionNum = computed(() => params.value?.questionId?.split("_").at(-1))
 const path = computed(() => route.path)
 const isAnswers = computed(() => path.value.split("/").at(-1) === "answers")
-const isQuestions = ref(params.value?.questionId?.includes("question") ?? false)
+const isQuestions = computed(() => params.value?.questionId?.includes("question") ?? false)
 const duration = params.value.title.split('_')[1]
 const timer = ref(localStorage.getItem('timer') || `${duration.padStart(2, '0')}:00:00`)
 const bannerStyle = computed(() => isAnswers.value ? '' : 'justify-self-center')

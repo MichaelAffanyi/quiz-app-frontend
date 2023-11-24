@@ -6,6 +6,7 @@ import {computed, ref, watch} from "vue";
 import {quizApi} from "@/utils";
 import {useStore} from "vuex";
 import {useRouter} from "vue-router";
+import {validateFields} from "@/utils/helpers";
 
 
 const store = useStore()
@@ -46,33 +47,8 @@ const handleChange = (event) => {
   fields.value[event.name].value = event.value
 }
 
-const validateFields = () => {
-  let isValid = true
-  Object.keys(fields.value).map((field) => {
-    if(typeof fields.value[field].value === 'string') {
-      if(fields.value[field].value.trim() === '') {
-        isValid = false
-        fields.value[field].isError = true
-      }
-    }
-    else {
-      if(!fields.value[field].value) {
-        isValid = false
-        fields.value[field].isError = true
-      }
-    }
-  })
-  // inputFields.forEach((field) => {
-  //   if(fields.value[field.toLowerCase()].value.trim() === '') {
-  //     isValid = false
-  //     fields.value[field.toLowerCase()].isError = true
-  //   }
-  // })
-  return isValid
-}
-
 const handleSubmit = async () => {
-  const isValid = validateFields()
+  const isValid = validateFields(fields)
   if(!isValid) {
     return
   }
