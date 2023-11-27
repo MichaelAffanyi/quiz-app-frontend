@@ -43,18 +43,10 @@ const fields = ref({
     isError: false
   }
 })
-const showNotification = ref({
-  value: false,
-  isError: false,
-  message: ''
-})
 
-const notificationStyles = computed(() => {
-  if(showNotification.value.isError) return 'bg-red-200 text-red-500'
-  return 'bg-green-200 text-green-500'
-})
 const inputFields = ['Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Points', 'Answer', 'Explanation']
 
+const emits = defineEmits(['showNotification'])
 const handleInput = (event) => {
   fields.value[event.name].isError = event.value === '';
   fields.value[event.name].value = event.value
@@ -62,7 +54,6 @@ const handleInput = (event) => {
 
 const handleSubmit = async () => {
   const id = route.params.quizId
-  console.log(id)
   const isValid = validateFields(fields)
 
   if (!isValid) return
@@ -83,28 +74,46 @@ const handleSubmit = async () => {
     const res = await quizApi().post(`/${id}/add-question`, newObject)
     console.log(res)
     if (res.status === 200) {
-      showNotification.value = true
-      setTimeout(() => {
-        showNotification.value = false
-      }, 3000)
+      emits('showNotification', {
+        value: true,
+        isError: false,
+        message: 'Question added successfully'
+      })
+      // showNotification.value.value = true
+      // showNotification.value.isError = false
+      // showNotification.value.message = 'Question added successfully'
+      // setTimeout(() => {
+      //   showNotification.value.value = false
+      //   showNotification.value.message = ''
+      // }, 3000)
     }
   } catch (e) {
-    console.log(e)
+    // console.log(e)
+    // await emits.showNotification({
+    //   value: true,
+    //   isError: true,
+    //   message: e.response.error || 'Something went wrong'
+    // })
+
+    emits('showNotification', {
+      value: true,
+      isError: true,
+      message: e.response.error || 'Something went wrong'
+    })
+    // showNotification.value.value = true
+    // showNotification.value.isError = true
+    // showNotification.value.message = e.response.error || 'Something went wrong'
+    // setTimeout(() => {
+    //   showNotification.value.value = false
+    //   showNotification.value.message = ''
+    // }, 3000)
   }
-  console.log(newObject)
 
 }
 
 </script>
 
 <template>
-<!--  <notification :show="showNotification.value" :class="notificationStyles">-->
-<!--    <div class="w-2 h-2 rounded-full" :class="{-->
-<!--      'bg-red-500': showNotification.isError,-->
-<!--      'bg-green-500': !showNotification.isError-->
-<!--    }"></div>-->
-<!--    {{showNotification.message}}-->
-<!--  </notification>-->
 <form @submit.prevent="handleSubmit" class="w-3/6">
   <h1 class="mt-16 mb-6 w-full text-center font-semibold text-2xl" >Enter question details</h1>
   <div class="grid grid-cols-2 gap-6">

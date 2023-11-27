@@ -13,7 +13,7 @@ const toggleShowStyle = computed(() => props.show ? 'translate-y-full' : 'transl
 
 <template>
   <div
-      class="fixed w-max left-0 right-0 mx-auto bg-red-200 px-8 py-2 rounded-full font-semibold flex items-center gap-4 transition transform duration-700 ease-in-out"
+      class="fixed w-max left-0 right-0 mx-auto px-8 py-2 rounded-full font-semibold flex items-center gap-4 transition transform duration-700 ease-in-out"
       :class="toggleShowStyle"
   >
     <slot></slot>
