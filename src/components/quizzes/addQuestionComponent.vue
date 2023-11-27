@@ -98,13 +98,13 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <notification :show="showNotification.value" :class="notificationStyles">
-    <div class="w-2 h-2 rounded-full" :class="{
-      'bg-red-500': showNotification.isError,
-      'bg-green-500': !showNotification.isError
-    }"></div>
-    {{showNotification.message}}
-  </notification>
+<!--  <notification :show="showNotification.value" :class="notificationStyles">-->
+<!--    <div class="w-2 h-2 rounded-full" :class="{-->
+<!--      'bg-red-500': showNotification.isError,-->
+<!--      'bg-green-500': !showNotification.isError-->
+<!--    }"></div>-->
+<!--    {{showNotification.message}}-->
+<!--  </notification>-->
 <form @submit.prevent="handleSubmit" class="w-3/6">
   <h1 class="mt-16 mb-6 w-full text-center font-semibold text-2xl" >Enter question details</h1>
   <div class="grid grid-cols-2 gap-6">
