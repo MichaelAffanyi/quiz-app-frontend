@@ -5,11 +5,15 @@ import {computed, ref, watch} from "vue";
 const props = defineProps({
   label: String,
   type: String,
-  modelValue: String,
   isError: Boolean,
   message: String,
   large: {
     type: Boolean,
+    default: false
+  },
+  reset: {
+    type: Boolean,
+    required: false,
     default: false
   }
 })
@@ -32,7 +36,6 @@ const containerStyles = computed(() => {
   if(props.isError) return 'border-[#EF4444]'
   if(isFocused.value) return 'border-[#3B82F6]'
   return 'border-[#9CA3AF]'
-
 })
 
 const handleUnFocus = () => {
@@ -42,6 +45,7 @@ const handleUnFocus = () => {
 }
 
 watch(value, (newValue) => {
+  console.log("new value:::",newValue)
   if (props.label === 'Points' && /\D/.test(newValue)) {
     value.value = newValue.replace(/\D/g, '')
   }

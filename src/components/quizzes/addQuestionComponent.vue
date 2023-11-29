@@ -88,12 +88,12 @@ const handleSubmit = async () => {
       // }, 3000)
     }
   } catch (e) {
-    // console.log(e)
-    // await emits.showNotification({
-    //   value: true,
-    //   isError: true,
-    //   message: e.response.error || 'Something went wrong'
-    // })
+    console.log(e)
+    await emits('showNotification', {
+      value: true,
+      isError: true,
+      message: e.response.data.error || 'Something went wrong'
+    })
 
     emits('showNotification', {
       value: true,

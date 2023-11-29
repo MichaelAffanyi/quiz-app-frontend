@@ -17,11 +17,18 @@ const showNotification = ref({
   message: ''
 })
 
-const handleShowNotif = (event) => {
-  console.log(event)
-  // showNotification.value = event.show
-  // showNotification.isError = event.isError
-  // showNotification.message = event.message
+const hideNotification = () => {
+  showNotification.value.value = false
+}
+
+const handleShowNotification = (event) => {
+  showNotification.value.value = event.value
+  showNotification.value.isError = event.isError
+  showNotification.value.message = event.message
+
+  setTimeout(() => {
+    hideNotification()
+  }, 3000)
 }
 
 </script>
@@ -40,7 +47,7 @@ const handleShowNotif = (event) => {
   </base-banner>
   <div class="px-16">
     <top-content></top-content>
-    <router-view @showNotification="handleShowNotif"></router-view>
+    <router-view @show-notification="handleShowNotification"></router-view>
   </div>
   <the-footer></the-footer>
 </template>
