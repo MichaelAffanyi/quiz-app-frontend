@@ -7,6 +7,7 @@ import Chart from "@/components/dashboard/chart.vue";
 import {ref} from "vue";
 import RecentQuizzes from "@/components/dashboard/recentQuizzes.vue";
 import {useStore} from "vuex";
+import QuizTable from "@/components/dashboard/quizTable.vue";
 
 const store = useStore()
 
@@ -35,23 +36,27 @@ const date = ref({
   end: new Date(Date.now() + (1000 * 60 * 60 * 24 * 7))
 })
 
-const username = store.getters.getUser.name
+const user = store.getters.getUser
+// console.log(store.getters.getUser)
 
 </script>
 
 <template>
-  <h1 class="font-semibold text-3xl">Hello {{username}}</h1>
+  <h1 class="font-semibold text-3xl">Hello {{user.name}}</h1>
   <div class="grid grid-cols-3 mt-12">
     <dashboard-card v-for="card in cards" :key="card.name" :card="card"></dashboard-card>
   </div>
-  <Chart />
-  <div class="w-full flex gap-8 mb-10">
-    <div class="w-full rounded-lg shadow-lg">
-      <v-date-picker v-model="date" expanded is-range :masks="{weekdays: 'WWW'}" borderless>
-      </v-date-picker>
+  <div v-if="user.role === 'student'">
+    <Chart />
+    <div class="w-full flex gap-8 mb-10">
+      <div class="w-full rounded-lg shadow-lg">
+        <v-date-picker v-model="date" expanded is-range :masks="{weekdays: 'WWW'}" borderless>
+        </v-date-picker>
+      </div>
+      <recent-quizzes></recent-quizzes>
     </div>
-    <recent-quizzes></recent-quizzes>
   </div>
+  <quiz-table v-if="user.role === 'lecturer'"></quiz-table>
 </template>
 
 <style scoped>

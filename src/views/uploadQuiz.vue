@@ -57,7 +57,7 @@ const handleSubmit = async () => {
   Object.keys(fields.value).map((field) => {
     formData.set(field, fields.value[field].value)
   })
-  formData.set('author', user.name)
+  formData.set('author', user._id)
   try {
     isLoading.value = true
     const res = await quizApi().post('/', formData)
@@ -66,7 +66,7 @@ const handleSubmit = async () => {
       emit('showNotification', {
         value: true,
         message: 'Quiz created successfully',
-        type: 'success'
+        isError: false
       })
       setTimeout(() => {
         router.push(`/dashboard/profile/${res?.data?._id}/add-question`)
@@ -77,7 +77,7 @@ const handleSubmit = async () => {
     emit('showNotification', {
       value: true,
       message: e.response.data.error || 'Something went wrong',
-      type: 'error'
+      isError: true
     })
   }
 }

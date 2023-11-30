@@ -58,7 +58,7 @@ const hasUser = Object.keys(user).length > 0
         </div>
         <h4 @click="handleClick('/dashboard/profile')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Profile</h4>
         <h4 @click="handleClick('/dashboard/profile/account-settings')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Account Settings</h4>
-        <h4 v-if="user.role === 'admin'" @click="handleClick('/dashboard/profile/upload-quiz')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Upload a quiz</h4>
+        <h4 v-if="user.role === 'lecturer'" @click="handleClick('/dashboard/profile/upload-quiz')" class="border-b px-2 py-3 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Upload a quiz</h4>
         <h4 @click="handleLogout" class="py-3 px-2 cursor-pointer hover:bg-gray-100 hover:rounded-lg">Logout</h4>
       </div>
     </section>

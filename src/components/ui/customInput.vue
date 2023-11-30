@@ -45,7 +45,6 @@ const handleUnFocus = () => {
 }
 
 watch(value, (newValue) => {
-  console.log("new value:::",newValue)
   if (props.label === 'Points' && /\D/.test(newValue)) {
     value.value = newValue.replace(/\D/g, '')
   }
