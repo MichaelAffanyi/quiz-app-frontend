@@ -20,7 +20,9 @@ const navigateToQuestions = (id) => {
 </script>
 
 <template>
-  <h1 v-if="quizzes.length < 1">Loading</h1>
+  <div v-if="quizzes.length < 1" class="w-full h-64 flex items-center justify-center">
+    <p class="text-center text-2xl font-semibold text-gray-700">No quizzes yet</p>
+  </div>
   <table v-else class="w-full my-10">
     <thead class="border-2 bg-gray-200 text-gray-700 text-lg">
     <tr>

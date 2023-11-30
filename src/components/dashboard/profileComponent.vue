@@ -11,6 +11,7 @@ import QuizTable from "@/components/dashboard/quizTable.vue";
 import {getLecturerQuizzes} from "@/utils/helpers";
 
 const store = useStore()
+const isLoading = ref(false)
 
 const cards = [
   {
@@ -41,9 +42,10 @@ const quizzes = ref([])
 const user = store.getters.getUser
 
 if (user.role === 'lecturer') {
+  isLoading.value = true
   getLecturerQuizzes().then((res) => {
-    console.log(res)
     quizzes.value = res.data
+    isLoading.value = false
   })
 }
 // console.log(store.getters.getUser)
@@ -65,7 +67,8 @@ if (user.role === 'lecturer') {
       <recent-quizzes></recent-quizzes>
     </div>
   </div>
-  <quiz-table v-if="user.role === 'lecturer'" :quizzes="quizzes"></quiz-table>
+  <p v-if="isLoading" class="text-center text-2xl font-semibold text-gray-700 my-6">Loading...</p>
+  <quiz-table v-if="user.role === 'lecturer' && !isLoading" :quizzes="quizzes"></quiz-table>
 </template>
 
 <style scoped>
