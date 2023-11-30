@@ -31,7 +31,7 @@ watch(selectedFilters.value, async (newValue) => {
   // console.log(newValue)
   try {
     const response = await quizApi().post('/filter-quiz', newValue)
-    console.log(response)
+
     quizzes.value = response?.data?.data
   } catch (e) {
     error.value = e?.response?.data?.error

@@ -189,10 +189,10 @@ export const deleteAccount = async ({isLoading, isSuccess, isError}) => {
     }
 }
 
-export const submitAnswer = async ({id, answers}) => {
+export const submitAnswer = async ({id, answers, userId}) => {
     const query = gql`
-        query($quizId: String!,$answers: [answer!]) {
-            submitAnswers(quizId: $quizId, answers: $answers) {
+        query($quizId: String!,$answers: [answer!], $userId: String!) {
+            submitAnswers(quizId: $quizId, answers: $answers, userId: $userId) {
                 answers {
                     id
                     question
@@ -212,8 +212,19 @@ export const submitAnswer = async ({id, answers}) => {
     `
     const variables = {
         quizId: id,
-        answers
+        answers,
+        userId
     }
     const {onResult, result, loading } = await useQuery(query, variables)
     return onResult
+}
+
+export const getLecturerQuizzes = async () => {
+    try {
+        const res = await quizApi().get('/quizzes-by-lecturer')
+        // console.log(res)
+        return res?.data
+    } catch (e) {
+        return e.response
+    }
 }

@@ -10,7 +10,7 @@ const filters = [
     },
     {
       name: 'Level',
-      filterBy: ['Beginner', 'Intermediate', 'Advanced']
+      filterBy: ['100L', '200L', '300L', '400L']
     },]
 
 const selectedFilters = inject('selectedFilters')

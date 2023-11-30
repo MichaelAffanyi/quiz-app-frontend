@@ -28,6 +28,7 @@ const handleLoadedData = () => {
 const handleNavigate = () => {
   const link = props.quiz.title.split(" ").join("-").toLowerCase()
   const id = props.quiz._id
+  // store.commit('setQuiz', props.quiz)
   router.push(`/quizzes/${id}_${props.quiz.duration}_${link}`)
 }
 
@@ -42,7 +43,7 @@ const handleNavigate = () => {
     <div @click="handleNavigate" class="absolute w-max h-max left-0 right-0 bottom-3 mx-auto card flex flex-col border border-white border-opacity-30 rounded-lg px-6 py-3 backdrop-blur cursor-pointer">
       <span v-if="!isRecentQuiz" class="font-bold">{{quiz.title}}</span>
       <div v-if="!isRecentQuiz" class="flex gap-2">
-        <span>{{quiz.author}}</span>
+        <span>{{quiz?.author?.name || 'Mikael'}}</span>
         <span class="flex gap-1 items-center bg-[#0267FF] rounded-full px-1 text-[11px]">
           <img :src="starIcon" alt="star">
           4.2K

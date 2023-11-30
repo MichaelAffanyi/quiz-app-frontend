@@ -34,3 +34,7 @@ export const getAnswers = (state) => {
 export const getAnswersData = (state) => {
     return state.answersData
 }
+
+export const getSingleQuiz = (state) => {
+    return state.singleQuiz
+}

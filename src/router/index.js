@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import {beforeRegisterEnter, beforeLoginEnter, beforeQuestionsEnter} from "@/utils/helpers"
 import {useStore} from "vuex";
-import {authApi} from "@/utils";
+import {authApi, quizApi} from "@/utils";
 import {getUser} from "@/utils/helpers";
 
 
@@ -87,7 +87,29 @@ const router = createRouter({
             children: [
                 {
                     path: '',
-                    component: () => import("@/components/quizzes/quizOnBoarding.vue")
+                    component: () => import("@/components/quizzes/quizOnBoarding.vue"),
+                    beforeEnter: async (to, from, next) => {
+                        const store = useStore()
+                        const {params: {title}} = to
+                        const id = title.split('_')[0]
+
+                        try {
+                            const res = await quizApi().get(`/${id}`)
+                            // console.log(res)
+                            if (res.status === 200) {
+                                store.commit('setSingleQuiz', res.data)
+                            }
+                            next()
+                        } catch (e) {
+                            next('/dashboard/profile')
+                        }
+                        // const hasQuiz = store.getters.getQuizData
+                        // if (!hasQuiz) {
+                        //     next(`/quizzes/${title}/questions`)
+                        //     return
+                        // }
+                        // next()
+                    }
                 },
                 {
                     path: 'answers',

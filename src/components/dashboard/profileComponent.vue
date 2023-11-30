@@ -8,6 +8,7 @@ import {ref} from "vue";
 import RecentQuizzes from "@/components/dashboard/recentQuizzes.vue";
 import {useStore} from "vuex";
 import QuizTable from "@/components/dashboard/quizTable.vue";
+import {getLecturerQuizzes} from "@/utils/helpers";
 
 const store = useStore()
 
@@ -35,8 +36,16 @@ const date = ref({
   start: new Date(Date.now()),
   end: new Date(Date.now() + (1000 * 60 * 60 * 24 * 7))
 })
+const quizzes = ref([])
 
 const user = store.getters.getUser
+
+if (user.role === 'lecturer') {
+  getLecturerQuizzes().then((res) => {
+    console.log(res)
+    quizzes.value = res.data
+  })
+}
 // console.log(store.getters.getUser)
 
 </script>
@@ -56,7 +65,7 @@ const user = store.getters.getUser
       <recent-quizzes></recent-quizzes>
     </div>
   </div>
-  <quiz-table v-if="user.role === 'lecturer'"></quiz-table>
+  <quiz-table v-if="user.role === 'lecturer'" :quizzes="quizzes"></quiz-table>
 </template>
 
 <style scoped>

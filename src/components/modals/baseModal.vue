@@ -11,6 +11,7 @@ const router = useRouter()
 const isLoading = ref(false)
 const isError = ref('')
 const isSuccess = ref('')
+const user = store.getters.getUser
 
 const props = defineProps({
   quizId: {
@@ -42,7 +43,7 @@ const handleAction = async () => {
     await deleteAccount({isLoading, isError, isSuccess})
   }
   if (props.type === "submitAnswer") {
-    const onResult = await submitAnswer({id: props.quizId, answers: props.answers})
+    const onResult = await submitAnswer({id: props.quizId, answers: props.answers, userId: user._id})
     onResult(result => {
       console.log(result.data.submitAnswers)
       store.commit('setAnswersData', result.data.submitAnswers)

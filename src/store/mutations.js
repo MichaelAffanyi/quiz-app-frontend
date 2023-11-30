@@ -42,3 +42,7 @@ export const replaceAnswer = (state, payload) => {
 export const setAnswersData = (state, payload) => {
     state.answersData = payload
 }
+
+export const setSingleQuiz = (state, payload) => {
+    state.singleQuiz = payload
+}

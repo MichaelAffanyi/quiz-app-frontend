@@ -6,6 +6,7 @@
   import repeatIcon from "@/assets/quizzes/repeatIcon.vue"
   import {computed, ref} from "vue";
   import {useRoute, useRouter} from "vue-router";
+  import {useStore} from "vuex";
 
   const props = defineProps(['duration'])
   const instructions = [
@@ -32,19 +33,21 @@
   ]
 
   const route = useRoute()
+  const store = useStore()
   const router = useRouter()
   const path = computed(() => `${route.path}/question_1`)
+  const quiz = computed(() => store.getters.getSingleQuiz)
+  const user = computed(() => store.getters.getUser)
 
   const moveToQuestion = () => {
-    // console.log(path.value)
+    if (user.value.role === 'lecturer') return
     router.replace(path.value)
-    // window.open(`${window.location.href}/question_1`,)
   }
 
 </script>
 <template>
   <div class="w-full h-[334px]">
-    <img :src="bgImage" alt="" class="w-full h-full object-cover">
+    <img :src="quiz.coverImage" alt="" class="w-full h-full object-cover">
   </div>
   <div class="w-full flex flex-col items-center mt-16">
     <div class="text-[#1D2939] text-center">
@@ -62,7 +65,7 @@
         </div>
       </div>
     </div>
-    <button @click="moveToQuestion" class="w-[181px] h-10 bg-[#0267FF] flex items-center justify-center rounded-lg text-white text-lg mt-16 mb-40">Start</button>
+    <button @click="moveToQuestion" class="w-[181px] h-10 bg-[#0267FF] flex items-center justify-center rounded-lg text-white text-lg mt-16 mb-40">{{user.role === 'lecturer' ? 'Add question' : 'Start'}}</button>
   </div>
 </template>
 

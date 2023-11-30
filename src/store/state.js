@@ -9,5 +9,6 @@ export default {
     openSubmitAnswer: false,
     questionData: null,
     answersData: null,
-    answers: []
+    answers: [],
+    singleQuiz: null,
 }

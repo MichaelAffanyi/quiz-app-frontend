@@ -10,8 +10,8 @@
   const router = useRouter()
   const answersData = computed(() => store.getters.getAnswersData)
   const showMark = computed(() => (selectedAnswer, correctAnswer) => selectedAnswer === correctAnswer ? CorrectCheck : WrongMark)
-  const statusHeading = computed(() => answersData.percentage >= 80 ? 'Congratulations! You passed!' : 'Sorry! You failed!')
-  const statusColor = computed(() => answersData.percentage >= 80 ? 'text-[#33FF33]' : 'text-[#FF3333]')
+  const statusHeading = computed(() => answersData.value.percentage >= 80 ? 'Congratulations! You passed!' : 'Sorry! You failed!')
+  const statusColor = computed(() => answersData.value.percentage >= 80 ? 'text-green-600' : 'text-[#FF3333]')
 
   const handleTryAgain = () => {
     router.replace('question_1')
