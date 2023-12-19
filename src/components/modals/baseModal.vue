@@ -43,11 +43,13 @@ const handleAction = async () => {
     await deleteAccount({isLoading, isError, isSuccess})
   }
   if (props.type === "submitAnswer") {
+    isLoading.value = true
     const onResult = await submitAnswer({id: props.quizId, answers: props.answers, userId: user._id})
     onResult(result => {
       console.log(result.data.submitAnswers)
       store.commit('setAnswersData', result.data.submitAnswers)
     })
+    isLoading.value = false
     // console.log("Result:::", result)
     setTimeout(() => {
       router.replace("answers")
@@ -65,7 +67,7 @@ const handleAction = async () => {
       <p class="max-w-[336px] text-[#414C5E]">{{message}}</p>
       <div class="flex gap-2">
         <button id="close" class="w-full py-1 border border-[#B3B3B3] rounded-lg">{{ cancelBtnText }}</button>
-        <button @click="handleAction" class="w-full py-1 border border-[#FF0000] bg-[#FF0000] rounded-lg text-white px-2">{{isLoading ? 'Deleting...' : confirmBtnText}}</button>
+        <button @click="handleAction" class="w-full py-1 border border-[#FF0000] bg-[#FF0000] rounded-lg text-white px-2">{{isLoading ? 'Loading...' : confirmBtnText}}</button>
       </div>
       <p v-if="!!isSuccess" class="success">{{isSuccess}}</p>
       <p v-if="!!isError" class="error">{{isError}}</p>

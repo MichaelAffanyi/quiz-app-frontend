@@ -15,7 +15,7 @@ import { ApolloClient, createHttpLink, InMemoryCache} from "@apollo/client/core"
 import {provideApolloClient} from "@vue/apollo-composable";
 
 const httpLink = createHttpLink({
-    uri: 'http://localhost:8080/graphql'
+    uri: `${import.meta.env.VITE_APP_API_URL}/graphql`
 })
 const cache = new InMemoryCache()
 
